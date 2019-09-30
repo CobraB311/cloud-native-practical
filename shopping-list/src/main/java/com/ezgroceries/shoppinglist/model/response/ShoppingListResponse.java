@@ -4,6 +4,7 @@ package com.ezgroceries.shoppinglist.model.response;
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -11,10 +12,17 @@ public class ShoppingListResponse {
 
     private String shoppingListId;
     private String name;
+    private List<String> ingredients;
 
     public ShoppingListResponse(String shoppingListId, String name) {
         this.shoppingListId = shoppingListId;
         this.name = name;
+    }
+
+    public ShoppingListResponse(String shoppingListId, String name, List<String> ingredients) {
+        this.shoppingListId = shoppingListId;
+        this.name = name;
+        this.ingredients = ingredients;
     }
 
     public String getShoppingListId() {
@@ -33,9 +41,17 @@ public class ShoppingListResponse {
         this.name = name;
     }
 
+    public List<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(shoppingListId, name);
+        return Objects.hash(shoppingListId, name, ingredients);
     }
 
     @Override
@@ -48,7 +64,8 @@ public class ShoppingListResponse {
         }
         final ShoppingListResponse other = (ShoppingListResponse) obj;
         return Objects.equals(this.shoppingListId, other.shoppingListId)
-                && Objects.equals(this.name, other.name);
+                && Objects.equals(this.name, other.name)
+                && Objects.equals(this.ingredients, other.ingredients);
     }
 
     @Override
@@ -56,6 +73,7 @@ public class ShoppingListResponse {
         return new StringJoiner(", ", ShoppingListResponse.class.getSimpleName() + "[", "]")
                 .add("shoppingListId='" + shoppingListId + "'")
                 .add("name='" + name + "'")
+                .add("ingredients=" + ingredients)
                 .toString();
     }
 

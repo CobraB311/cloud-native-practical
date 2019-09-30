@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -31,8 +32,18 @@ import java.util.stream.Collectors;
 public class ShoppingListController {
 
     @GetMapping(value = "/{shoppingListId}")
-    public Resource<ShoppingList> getShoppingList(@PathVariable("shoppingListId") String id) {
-        return new Resource<>(new ShoppingList(UUID.fromString(id), "")); // TODO
+    public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
+        ShoppingList dummyShoppingList = createDummyShoppingList(
+                "90689338-499a-4c49-af90-f1e73068ad4f", "Stephanie's birthday"
+        );
+        List<String> ingredients = createDummyIngredients();
+        ShoppingListResponse response = new ShoppingListResponse(
+                dummyShoppingList.getShoppingListId().toString(),
+                dummyShoppingList.getName(),
+                ingredients
+        );
+        return new Resource<>(response);
+
     }
 
     @PostMapping
@@ -66,6 +77,16 @@ public class ShoppingListController {
 
         // Return only id's
         return cocktails.stream().map(c -> new CocktailIdResponse(c.getCocktailId().toString())).collect(Collectors.toSet());
+    }
+
+    private List<String> createDummyIngredients() {
+        List<String> ingredients =  new ArrayList<>(5);
+        ingredients.add("Tequila");
+        ingredients.add("Triple sec");
+        ingredients.add("Lime juice");
+        ingredients.add("Salt");
+        ingredients.add("Blue Curacao");
+        return ingredients;
     }
 
 }
