@@ -34,7 +34,7 @@ public class ShoppingListController {
     @GetMapping(value = "/{shoppingListId}")
     public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
         ShoppingList dummyShoppingList = createDummyShoppingList(
-                "90689338-499a-4c49-af90-f1e73068ad4f", "Stephanie's birthday"
+                id, "Stephanie's birthday"
         );
         ShoppingListResponse response = new ShoppingListResponse(
                 dummyShoppingList.getShoppingListId().toString(),
