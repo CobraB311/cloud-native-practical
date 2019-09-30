@@ -6,10 +6,12 @@ package com.ezgroceries.shoppinglist.controller;
 
 import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.model.response.CocktailId;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,11 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/shopping-lists", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShoppingListController {
 
+    @GetMapping(value = "/{shoppingListId}")
+    public Resource<ShoppingList> getShoppingList(@PathVariable("shoppingListId") String id) {
+        return new Resource<>(new ShoppingList(UUID.fromString(id), "")); // TODO
+    }
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Resource<ShoppingList> newShoppingList(@RequestBody String name) {
@@ -35,7 +42,7 @@ public class ShoppingListController {
     }
 
     @PostMapping(value = "/{shoppingListId}/cocktails")
-    public Resources<String> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailResource> cocktails) {
+    public Resources<CocktailId> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailResource> cocktails) {
         return new Resources<>(addCocktailToShoppingList(id, cocktails));
     }
 
@@ -46,13 +53,13 @@ public class ShoppingListController {
         );
     }
 
-    private Set<String> addCocktailToShoppingList(String id, List<CocktailResource> cocktails) {
+    private Set<CocktailId> addCocktailToShoppingList(String id, List<CocktailResource> cocktails) {
         ShoppingList dummyShoppingList = createDummyShoppingList(id, "dummy" + id);
         Set<UUID> cocktailIds = cocktails.stream().map(CocktailResource::getCocktailId).collect(Collectors.toSet());
         dummyShoppingList.setCocktailIds(cocktailIds);
 
         // Return only id's
-        return cocktails.stream().map(c -> c.getCocktailId().toString()).collect(Collectors.toSet());
+        return cocktails.stream().map(c -> new CocktailId(c.getCocktailId().toString())).collect(Collectors.toSet());
     }
 
 }
