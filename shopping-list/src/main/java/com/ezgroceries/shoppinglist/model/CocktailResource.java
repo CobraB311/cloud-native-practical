@@ -4,8 +4,8 @@ package com.ezgroceries.shoppinglist.model;
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -16,9 +16,9 @@ public class CocktailResource {
     private String glass;
     private String instructions;
     private String image;
-    private Set<String> ingredients;
+    private List<String> ingredients;
 
-    public CocktailResource(UUID cocktailId, String name, String glass, String instructions, String image, Set<String> ingredients) {
+    public CocktailResource(UUID cocktailId, String name, String glass, String instructions, String image, List<String> ingredients) {
         this.cocktailId = cocktailId;
         this.name = name;
         this.glass = glass;
@@ -70,11 +70,11 @@ public class CocktailResource {
         this.image = image;
     }
 
-    public Set<String> getIngredients() {
+    public List<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Set<String> ingredients) {
+    public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
     }
 

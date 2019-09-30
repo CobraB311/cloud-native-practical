@@ -7,6 +7,7 @@ package com.ezgroceries.shoppinglist.controller;
 import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.model.response.CocktailId;
+import com.ezgroceries.shoppinglist.model.response.ShoppingListResponse;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,9 +37,13 @@ public class ShoppingListController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Resource<ShoppingList> newShoppingList(@RequestBody String name) {
+    public Resource<ShoppingListResponse> newShoppingList(@RequestBody Map<String, String> name) { // TODO Create request class for this
+        ShoppingList dummyShoppingList = createDummyShoppingList("eb18bb7c-61f3-4c9f-981c-55b1b8ee8915", name.get("name"));
         return new Resource<>(
-                createDummyShoppingList("eb18bb7c-61f3-4c9f-981c-55b1b8ee8915", "Stephanie's birthday")
+                new ShoppingListResponse(
+                        dummyShoppingList.getShoppingListId().toString(),
+                        dummyShoppingList.getName()
+                )
         );
     }
 
