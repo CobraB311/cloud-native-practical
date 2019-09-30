@@ -73,4 +73,27 @@ public class ShoppingListControllerTest {
                 .andExpect(jsonPath("$.name").exists())
         ;
     }
+
+    @Test
+    public void testAddToShoppingList() throws Exception {
+        this.mockMvc.perform(
+                post(rootMapping + "/97c8e5bd-5353-426e-b57b-69eb2260ace3/cocktails")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("[\n" +
+                        "  {\n" +
+                        "    \"cocktailId\": \"23b3d85a-3928-41c0-a533-6538a71e17c4\"\n" +
+                        "  },\n" +
+                        "  {\n" +
+                        "    \"cocktailId\": \"d615ec78-fe93-467b-8d26-5d26d8eab073\"\n" +
+                        "  }\n" +
+                        "]")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$._embedded.cocktailIdResponseList",
+                        jsonPath("cocktailId").exists()
+                ).isArray())
+        ;
+    }
+
 }
