@@ -7,11 +7,11 @@ package com.ezgroceries.shoppinglist.model.response;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class CocktailId {
+public class CocktailIdResponse {
 
     private String cocktailId;
 
-    public CocktailId(String cocktailId) {
+    public CocktailIdResponse(String cocktailId) {
         this.cocktailId = cocktailId;
     }
 
@@ -36,13 +36,13 @@ public class CocktailId {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final CocktailId other = (CocktailId) obj;
+        final CocktailIdResponse other = (CocktailIdResponse) obj;
         return Objects.equals(this.cocktailId, other.cocktailId);
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", CocktailId.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", CocktailIdResponse.class.getSimpleName() + "[", "]")
                 .add("cocktailId='" + cocktailId + "'")
                 .toString();
     }

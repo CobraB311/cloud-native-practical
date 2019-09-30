@@ -7,7 +7,7 @@ package com.ezgroceries.shoppinglist.controller;
 import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.model.request.ShoppingListRequest;
-import com.ezgroceries.shoppinglist.model.response.CocktailId;
+import com.ezgroceries.shoppinglist.model.response.CocktailIdResponse;
 import com.ezgroceries.shoppinglist.model.response.ShoppingListResponse;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -48,7 +48,7 @@ public class ShoppingListController {
     }
 
     @PostMapping(value = "/{shoppingListId}/cocktails")
-    public Resources<CocktailId> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailResource> cocktails) {
+    public Resources<CocktailIdResponse> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailResource> cocktails) {
         return new Resources<>(addCocktailToShoppingList(id, cocktails));
     }
 
@@ -59,13 +59,13 @@ public class ShoppingListController {
         );
     }
 
-    private Set<CocktailId> addCocktailToShoppingList(String id, List<CocktailResource> cocktails) {
+    private Set<CocktailIdResponse> addCocktailToShoppingList(String id, List<CocktailResource> cocktails) {
         ShoppingList dummyShoppingList = createDummyShoppingList(id, "dummy" + id);
         Set<UUID> cocktailIds = cocktails.stream().map(CocktailResource::getCocktailId).collect(Collectors.toSet());
         dummyShoppingList.setCocktailIds(cocktailIds);
 
         // Return only id's
-        return cocktails.stream().map(c -> new CocktailId(c.getCocktailId().toString())).collect(Collectors.toSet());
+        return cocktails.stream().map(c -> new CocktailIdResponse(c.getCocktailId().toString())).collect(Collectors.toSet());
     }
 
 }
