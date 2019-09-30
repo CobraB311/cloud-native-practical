@@ -36,14 +36,33 @@ public class ShoppingListController {
         ShoppingList dummyShoppingList = createDummyShoppingList(
                 "90689338-499a-4c49-af90-f1e73068ad4f", "Stephanie's birthday"
         );
-        List<String> ingredients = createDummyIngredients();
         ShoppingListResponse response = new ShoppingListResponse(
                 dummyShoppingList.getShoppingListId().toString(),
                 dummyShoppingList.getName(),
-                ingredients
+                createDummyIngredients()
         );
         return new Resource<>(response);
 
+    }
+
+    @GetMapping
+    public Resources<ShoppingListResponse> getAllShoppingList() {
+        List<ShoppingListResponse> responses = new ArrayList<>(2);
+        responses.add(
+                new ShoppingListResponse(
+                        "4ba92a46-1d1b-4e52-8e38-13cd56c7224c",
+                        "Stephanie's birthday",
+                        createDummyIngredients()
+                )
+        );
+        responses.add(
+                new ShoppingListResponse(
+                        "6c7d09c2-8a25-4d54-a979-25ae779d2465",
+                        "My Birthday",
+                        createDummyIngredients()
+                )
+        );
+        return new Resources<>(responses);
     }
 
     @PostMapping
