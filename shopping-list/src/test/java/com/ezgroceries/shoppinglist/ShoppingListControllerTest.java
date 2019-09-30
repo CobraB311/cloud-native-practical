@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,13 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class ShoppingListControllerTest {
 
+    private final String rootMapping = "/shopping-lists";
+
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void testGetShoppingList() throws Exception {
         this.mockMvc.perform(
-                get("/shopping-lists/" + UUID.randomUUID().toString())
+                get(rootMapping + "/" + UUID.randomUUID().toString())
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -44,7 +48,7 @@ public class ShoppingListControllerTest {
     @Test
     public void testGetAllShoppingList() throws Exception {
         this.mockMvc.perform(
-                get("/shopping-lists")
+                get(rootMapping)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -56,4 +60,17 @@ public class ShoppingListControllerTest {
         ;
     }
 
+    @Test
+    public void testNewShoppingList() throws Exception {
+        this.mockMvc.perform(
+                post(rootMapping)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"name\": \"Stephanie's birthday\"}")
+        )
+                .andExpect(status().is(HttpStatus.CREATED.value()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.shoppingListId").exists())
+                .andExpect(jsonPath("$.name").exists())
+        ;
+    }
 }
