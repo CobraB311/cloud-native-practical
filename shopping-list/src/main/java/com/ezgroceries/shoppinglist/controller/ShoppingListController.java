@@ -31,20 +31,6 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/shopping-lists", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShoppingListController {
 
-    @GetMapping(value = "/{shoppingListId}")
-    public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
-        ShoppingList dummyShoppingList = createDummyShoppingList(
-                id, "Stephanie's birthday"
-        );
-        ShoppingListResponse response = new ShoppingListResponse(
-                dummyShoppingList.getShoppingListId().toString(),
-                dummyShoppingList.getName(),
-                createDummyIngredients()
-        );
-        return new Resource<>(response);
-
-    }
-
     @GetMapping
     public Resources<ShoppingListResponse> getAllShoppingList() {
         List<ShoppingListResponse> responses = new ArrayList<>(2);
@@ -63,6 +49,20 @@ public class ShoppingListController {
                 )
         );
         return new Resources<>(responses);
+    }
+
+    @GetMapping(value = "/{shoppingListId}")
+    public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
+        ShoppingList dummyShoppingList = createDummyShoppingList(
+                id, "Stephanie's birthday"
+        );
+        ShoppingListResponse response = new ShoppingListResponse(
+                dummyShoppingList.getShoppingListId().toString(),
+                dummyShoppingList.getName(),
+                createDummyIngredients()
+        );
+        return new Resource<>(response);
+
     }
 
     @PostMapping

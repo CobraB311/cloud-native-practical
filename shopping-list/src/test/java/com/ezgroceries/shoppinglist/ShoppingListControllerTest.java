@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ShoppingListController {
+public class ShoppingListControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,6 +38,21 @@ public class ShoppingListController {
                 .andExpect(jsonPath("$.shoppingListId").exists())
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.ingredients").isArray())
+        ;
+    }
+
+    @Test
+    public void testGetAllShoppingList() throws Exception {
+        this.mockMvc.perform(
+                get("/shopping-lists")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$._embedded.shoppingListResponseList",
+                        jsonPath("shoppingListId").exists(),
+                        jsonPath("name").exists(),
+                        jsonPath("ingredients").isArray()
+                ).exists())
         ;
     }
 
