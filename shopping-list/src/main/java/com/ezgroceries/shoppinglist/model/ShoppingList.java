@@ -5,6 +5,7 @@ package com.ezgroceries.shoppinglist.model;
 */
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ public class ShoppingList {
 
     private UUID shoppingListId;
     private String name;
+    private Set<UUID> cocktailIds;
 
     public ShoppingList(UUID shoppingListId, String name) {
         this.shoppingListId = shoppingListId;
@@ -34,9 +36,17 @@ public class ShoppingList {
         this.name = name;
     }
 
+    public Set<UUID> getCocktailIds() {
+        return cocktailIds;
+    }
+
+    public void setCocktailIds(Set<UUID> cocktailIds) {
+        this.cocktailIds = cocktailIds;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(shoppingListId, name);
+        return Objects.hash(shoppingListId, name, cocktailIds);
     }
 
     @Override
@@ -49,7 +59,8 @@ public class ShoppingList {
         }
         final ShoppingList other = (ShoppingList) obj;
         return Objects.equals(this.shoppingListId, other.shoppingListId)
-                && Objects.equals(this.name, other.name);
+                && Objects.equals(this.name, other.name)
+                && Objects.equals(this.cocktailIds, other.cocktailIds);
     }
 
     @Override
@@ -57,6 +68,7 @@ public class ShoppingList {
         return new StringJoiner(", ", ShoppingList.class.getSimpleName() + "[", "]")
                 .add("shoppingListId=" + shoppingListId)
                 .add("name='" + name + "'")
+                .add("cocktailIds=" + cocktailIds)
                 .toString();
     }
 
