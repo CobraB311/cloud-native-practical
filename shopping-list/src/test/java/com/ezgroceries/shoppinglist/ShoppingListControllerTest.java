@@ -33,19 +33,6 @@ public class ShoppingListControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void testGetShoppingList() throws Exception {
-        this.mockMvc.perform(
-                get(rootMapping + "/" + UUID.randomUUID().toString())
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.shoppingListId").exists())
-                .andExpect(jsonPath("$.name").exists())
-                .andExpect(jsonPath("$.ingredients").isArray())
-        ;
-    }
-
-    @Test
     public void testGetAllShoppingList() throws Exception {
         this.mockMvc.perform(
                 get(rootMapping)
@@ -57,6 +44,19 @@ public class ShoppingListControllerTest {
                         jsonPath("name").exists(),
                         jsonPath("ingredients").isArray()
                 ).exists())
+        ;
+    }
+
+    @Test
+    public void testGetShoppingList() throws Exception {
+        this.mockMvc.perform(
+                get(rootMapping + "/" + UUID.randomUUID().toString())
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.shoppingListId").exists())
+                .andExpect(jsonPath("$.name").exists())
+                .andExpect(jsonPath("$.ingredients").isArray())
         ;
     }
 
@@ -77,7 +77,7 @@ public class ShoppingListControllerTest {
     @Test
     public void testAddToShoppingList() throws Exception {
         this.mockMvc.perform(
-                post(rootMapping + "/97c8e5bd-5353-426e-b57b-69eb2260ace3/cocktails")
+                post(rootMapping + "/"+  UUID.randomUUID().toString() + "/cocktails")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("[\n" +
                         "  {\n" +
