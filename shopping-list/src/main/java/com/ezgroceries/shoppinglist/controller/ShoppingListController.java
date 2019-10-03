@@ -9,6 +9,8 @@ import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.model.request.ShoppingListRequest;
 import com.ezgroceries.shoppinglist.model.response.CocktailIdResponse;
 import com.ezgroceries.shoppinglist.model.response.ShoppingListResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -28,9 +30,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+@Api(tags = "Shopping lists")
 @RequestMapping(value = "/shopping-lists", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShoppingListController {
 
+    @ApiOperation(value = "Get all shopping lists")
     @GetMapping
     public Resources<ShoppingListResponse> getAllShoppingList() {
         List<ShoppingListResponse> responses = new ArrayList<>(2);
@@ -51,6 +55,7 @@ public class ShoppingListController {
         return new Resources<>(responses);
     }
 
+    @ApiOperation(value = "Get shopping list by id")
     @GetMapping(value = "/{shoppingListId}")
     public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
         ShoppingList dummyShoppingList = createDummyShoppingList(
@@ -65,6 +70,7 @@ public class ShoppingListController {
 
     }
 
+    @ApiOperation(value = "Create new shopping list")
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Resource<ShoppingListResponse> newShoppingList(@RequestBody ShoppingListRequest list) {
@@ -77,6 +83,7 @@ public class ShoppingListController {
         );
     }
 
+    @ApiOperation(value = "Add cocktails to shopping list by id")
     @PostMapping(value = "/{shoppingListId}/cocktails")
     public Resources<CocktailIdResponse> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailResource> cocktails) {
         return new Resources<>(addCocktailToShoppingList(id, cocktails));

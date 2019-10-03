@@ -5,6 +5,8 @@ package com.ezgroceries.shoppinglist.controller;
 */
 
 import com.ezgroceries.shoppinglist.model.CocktailResource;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,9 +18,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Api(tags = "Cocktails")
 @RequestMapping(value = "/cocktails", produces = "application/json")
 public class CocktailController {
 
+    @ApiOperation(value = "Get all cocktails")
     @GetMapping
     public Resources<CocktailResource> get(@RequestParam String search) {
         return new Resources<>(getDummyResources());
@@ -40,3 +44,4 @@ public class CocktailController {
                         Arrays.asList("Tequila", "Blue Curacao", "Lime juice", "Salt")));
     }
 }
+
