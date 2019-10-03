@@ -1,12 +1,13 @@
-package com.ezgroceries.shoppinglist.model.response;
+package com.ezgroceries.shoppinglist.controller.model.response;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.google.common.base.MoreObjects;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public class ShoppingListResponse {
 
@@ -70,10 +71,10 @@ public class ShoppingListResponse {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ShoppingListResponse.class.getSimpleName() + "[", "]")
-                .add("shoppingListId='" + shoppingListId + "'")
-                .add("name='" + name + "'")
-                .add("ingredients=" + ingredients)
+        return MoreObjects.toStringHelper(this)
+                .add("shoppingListId", shoppingListId)
+                .add("name", name)
+                .add("ingredients", ingredients)
                 .toString();
     }
 
