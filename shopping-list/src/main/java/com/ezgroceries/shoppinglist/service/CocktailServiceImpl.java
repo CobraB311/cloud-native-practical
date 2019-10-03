@@ -9,14 +9,14 @@ import com.ezgroceries.shoppinglist.service.client.CocktailDBClient;
 import com.ezgroceries.shoppinglist.service.client.model.CocktailDBResponse;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class CocktailServiceImpl implements CocktailService {
 
     private final CocktailDBClient cocktailDBClient;
