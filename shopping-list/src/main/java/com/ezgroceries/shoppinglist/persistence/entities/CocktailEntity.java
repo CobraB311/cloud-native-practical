@@ -4,12 +4,15 @@ package com.ezgroceries.shoppinglist.persistence.entities;
     Created by Ruben Bernaert (JD68212) on 03/10/2019
 */
 
+import com.ezgroceries.shoppinglist.persistence.entities.util.StringSetConverter;
 import com.google.common.base.MoreObjects;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,8 +30,9 @@ public class CocktailEntity {
     @Column(name = "NAME")
     private String name;
 
+    @Convert(converter = StringSetConverter.class)
     @Column(name = "INGREDIENTS")
-    private String ingredients;
+    private List<String> ingredients;
 
     public UUID getId() {
         return id;
@@ -54,11 +58,11 @@ public class CocktailEntity {
         this.name = name;
     }
 
-    public String getIngredients() {
+    public List<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
     }
 
