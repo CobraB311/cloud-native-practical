@@ -1,12 +1,12 @@
-package com.ezgroceries.shoppinglist.service;
+package com.ezgroceries.shoppinglist.service.external;
 
 /*
     Created by Ruben Bernaert (JD68212) on 03/10/2019
 */
 
 import com.ezgroceries.shoppinglist.model.CocktailResource;
-import com.ezgroceries.shoppinglist.service.client.CocktailDBClient;
-import com.ezgroceries.shoppinglist.service.client.model.CocktailDBResponse;
+import com.ezgroceries.shoppinglist.service.external.client.CocktailDBClient;
+import com.ezgroceries.shoppinglist.service.external.client.model.CocktailDBResponse;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class CocktailServiceImpl implements CocktailService {
+public class CocktailExtServiceImpl implements CocktailExtService {
 
     private final CocktailDBClient cocktailDBClient;
 
     @Autowired
-    public CocktailServiceImpl(CocktailDBClient cocktailDBClient) {
+    public CocktailExtServiceImpl(CocktailDBClient cocktailDBClient) {
         this.cocktailDBClient = cocktailDBClient;
     }
 

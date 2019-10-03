@@ -5,7 +5,7 @@ package com.ezgroceries.shoppinglist;
 */
 
 import com.ezgroceries.shoppinglist.model.CocktailResource;
-import com.ezgroceries.shoppinglist.service.CocktailService;
+import com.ezgroceries.shoppinglist.service.external.CocktailExtService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,11 +37,11 @@ public class CocktailControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CocktailService cocktailService;
+    private CocktailExtService cocktailExtService;
 
     @Before
     public void initialize() {
-        Mockito.when(cocktailService.searchCocktails(ArgumentMatchers.anyString())).thenReturn(mockedCocktails());
+        Mockito.when(cocktailExtService.searchCocktails(ArgumentMatchers.anyString())).thenReturn(mockedCocktails());
     }
 
     @Test
