@@ -4,10 +4,12 @@ package com.ezgroceries.shoppinglist.service;
     Created by Ruben Bernaert (JD68212) on 03/10/2019
 */
 
-import com.ezgroceries.shoppinglist.service.client.model.CocktailDBResponse;
+import com.ezgroceries.shoppinglist.controller.model.CocktailResource;
+
+import java.util.List;
 
 public interface CocktailService {
 
-    CocktailDBResponse searchCocktails(String search);
+    List<CocktailResource> searchCocktails(String search);
 
 }
