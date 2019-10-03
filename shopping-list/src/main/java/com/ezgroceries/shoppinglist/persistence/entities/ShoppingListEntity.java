@@ -9,7 +9,12 @@ import com.google.common.base.MoreObjects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,6 +28,14 @@ public class ShoppingListEntity {
 
     @Column(name = "NAME")
     private String name;
+
+    @ManyToMany
+    @JoinTable(
+            name = "COCKTAIL_SHOPPING_LIST",
+            joinColumns = @JoinColumn(name = "SHOPPING_LIST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "COCKTAIL_ID")
+    )
+    private List<CocktailEntity> cocktailEntities = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -40,9 +53,17 @@ public class ShoppingListEntity {
         this.name = name;
     }
 
+    public List<CocktailEntity> getCocktailEntities() {
+        return cocktailEntities;
+    }
+
+    public void setCocktailEntities(List<CocktailEntity> cocktailEntities) {
+        this.cocktailEntities = cocktailEntities;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, cocktailEntities);
     }
 
     @Override
@@ -55,7 +76,8 @@ public class ShoppingListEntity {
         }
         final ShoppingListEntity other = (ShoppingListEntity) obj;
         return Objects.equals(this.id, other.id)
-                && Objects.equals(this.name, other.name);
+                && Objects.equals(this.name, other.name)
+                && Objects.equals(this.cocktailEntities, other.cocktailEntities);
     }
 
     @Override
@@ -63,6 +85,7 @@ public class ShoppingListEntity {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
+                .add("cocktailEntities", cocktailEntities)
                 .toString();
     }
 

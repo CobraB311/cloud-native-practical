@@ -11,7 +11,11 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -33,6 +37,14 @@ public class CocktailEntity {
     @Convert(converter = StringSetConverter.class)
     @Column(name = "INGREDIENTS")
     private List<String> ingredients;
+
+    @ManyToMany
+    @JoinTable(
+            name = "COCKTAIL_SHOPPING_LIST",
+            joinColumns = @JoinColumn(name = "COCKTAIL_ID"),
+            inverseJoinColumns = @JoinColumn(name = "SHOPPING_LIST_ID")
+    )
+    private List<ShoppingListEntity> shoppingListEntities = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -66,9 +78,17 @@ public class CocktailEntity {
         this.ingredients = ingredients;
     }
 
+    public List<ShoppingListEntity> getShoppingListEntities() {
+        return shoppingListEntities;
+    }
+
+    public void setShoppingListEntities(List<ShoppingListEntity> shoppingListEntities) {
+        this.shoppingListEntities = shoppingListEntities;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, idDrink, name, ingredients);
+        return Objects.hash(id, idDrink, name, ingredients, shoppingListEntities);
     }
 
     @Override
@@ -83,7 +103,8 @@ public class CocktailEntity {
         return Objects.equals(this.id, other.id)
                 && Objects.equals(this.idDrink, other.idDrink)
                 && Objects.equals(this.name, other.name)
-                && Objects.equals(this.ingredients, other.ingredients);
+                && Objects.equals(this.ingredients, other.ingredients)
+                && Objects.equals(this.shoppingListEntities, other.shoppingListEntities);
     }
 
     @Override
@@ -93,6 +114,7 @@ public class CocktailEntity {
                 .add("idDrink", idDrink)
                 .add("name", name)
                 .add("ingredients", ingredients)
+                .add("shoppingListEntities", shoppingListEntities)
                 .toString();
     }
 

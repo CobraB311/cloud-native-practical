@@ -4,7 +4,7 @@ package com.ezgroceries.shoppinglist.controller;
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
-import com.ezgroceries.shoppinglist.controller.model.CocktailResource;
+import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.service.CocktailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
