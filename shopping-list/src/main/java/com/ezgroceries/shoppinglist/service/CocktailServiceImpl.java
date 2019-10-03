@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CocktailServiceImpl implements CocktailService {
@@ -44,31 +45,22 @@ public class CocktailServiceImpl implements CocktailService {
         )).collect(Collectors.toList());
     }
 
-    // TODO find better implementation
     private List<String> getIngredients(CocktailDBResponse.DrinkResource resource) {
-        List<String> ingredients = new ArrayList<>();
-        if (!Strings.isNullOrEmpty(resource.getStrIngredient1())) {
-            ingredients.add(resource.getStrIngredient1());
-        }
-        if (!Strings.isNullOrEmpty(resource.getStrIngredient2())) {
-            ingredients.add(resource.getStrIngredient2());
-        }
-        if (!Strings.isNullOrEmpty(resource.getStrIngredient3())) {
-            ingredients.add(resource.getStrIngredient3());
-        }
-        if (!Strings.isNullOrEmpty(resource.getStrIngredient4())) {
-            ingredients.add(resource.getStrIngredient4());
-        }
-        if (!Strings.isNullOrEmpty(resource.getStrIngredient5())) {
-            ingredients.add(resource.getStrIngredient5());
-        }
-        if (!Strings.isNullOrEmpty(resource.getStrIngredient6())) {
-            ingredients.add(resource.getStrIngredient6());
-        }
-        if (!Strings.isNullOrEmpty(resource.getStrIngredient7())) {
-            ingredients.add(resource.getStrIngredient7());
-        }
-        return ingredients;
+
+        return Stream.of(
+                resource.getStrIngredient1(),
+                resource.getStrIngredient2(),
+                resource.getStrIngredient3(),
+                resource.getStrIngredient4(),
+                resource.getStrIngredient5(),
+                resource.getStrIngredient6(),
+                resource.getStrIngredient7()
+        ).filter(
+                i -> !Strings.isNullOrEmpty(i)
+        ).collect(
+                Collectors.toList()
+        );
+
     }
 
 }
