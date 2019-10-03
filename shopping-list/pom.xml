@@ -19,6 +19,8 @@
 	</properties>
 
 	<dependencies>
+
+<!--		Spring boot-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -32,6 +34,14 @@
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
 
+<!--		Swagger-->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+
+<!--		Test-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
