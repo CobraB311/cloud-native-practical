@@ -42,6 +42,11 @@ public class CocktailController {
 
     private List<CocktailResource> getCocktails(String search) {
         final CocktailDBResponse response = this.cocktailService.searchCocktails(search);
+
+        if (response == null || response.getDrinks() == null || response.getDrinks().isEmpty()) {
+            return new ArrayList<>();
+        }
+
         return response.getDrinks().stream().map(d -> new CocktailResource(
                 UUID.randomUUID(),
                 d.getStrDrink(),
