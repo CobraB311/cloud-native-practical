@@ -7,7 +7,6 @@ package com.ezgroceries.shoppinglist.service.external;
 import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.service.external.client.CocktailDBClient;
 import com.ezgroceries.shoppinglist.service.external.client.model.CocktailDBResponse;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CocktailExtServiceImpl implements CocktailExtService {
@@ -42,26 +40,8 @@ public class CocktailExtServiceImpl implements CocktailExtService {
                 d.getStrGlass(),
                 d.getStrInstructions(),
                 d.getStrDrinkThumb(),
-                getIngredients(d)
+                d.getIngredients()
         )).collect(Collectors.toList());
-    }
-
-    private List<String> getIngredients(CocktailDBResponse.DrinkResource resource) {
-
-        return Stream.of(
-                resource.getStrIngredient1(),
-                resource.getStrIngredient2(),
-                resource.getStrIngredient3(),
-                resource.getStrIngredient4(),
-                resource.getStrIngredient5(),
-                resource.getStrIngredient6(),
-                resource.getStrIngredient7()
-        ).filter(
-                i -> !Strings.isNullOrEmpty(i)
-        ).collect(
-                Collectors.toList()
-        );
-
     }
 
 }

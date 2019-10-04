@@ -5,9 +5,12 @@ package com.ezgroceries.shoppinglist.service.external.client.model;
 */
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CocktailDBResponse {
 
@@ -130,6 +133,22 @@ public class CocktailDBResponse {
 
         public void setStrIngredient7(String strIngredient7) {
             this.strIngredient7 = strIngredient7;
+        }
+
+        public List<String> getIngredients() {
+            return Stream.of(
+                    this.getStrIngredient1(),
+                    this.getStrIngredient2(),
+                    this.getStrIngredient3(),
+                    this.getStrIngredient4(),
+                    this.getStrIngredient5(),
+                    this.getStrIngredient6(),
+                    this.getStrIngredient7()
+            ).filter(
+                    i -> !Strings.isNullOrEmpty(i)
+            ).collect(
+                    Collectors.toList()
+            );
         }
 
         @Override
