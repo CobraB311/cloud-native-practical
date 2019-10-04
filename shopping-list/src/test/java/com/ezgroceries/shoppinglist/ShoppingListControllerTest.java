@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,6 +56,8 @@ public class ShoppingListControllerTest extends AbstractTest {
         when(cocktailService.searchCocktails(anyString())).thenReturn(mockedCocktails());
         when(shoppingListService.create(any())).thenReturn(mockedShoppingList());
         when(shoppingListService.addCocktails(any(), anySet())).thenReturn(mockedShoppingList());
+        when(shoppingListService.searchShoppingList(any())).thenReturn(mockedShoppingList());
+        when(cocktailService.searchDistinctIngredients(any())).thenReturn(mockedIngredients());
     }
 
     @Test
@@ -81,6 +85,17 @@ public class ShoppingListControllerTest extends AbstractTest {
                 .andExpect(jsonPath("$.shoppingListId").exists())
                 .andExpect(jsonPath("$.name").exists())
                 .andExpect(jsonPath("$.ingredients").isArray())
+                .andExpect(content().json("{\n" +
+                        "  \"shoppingListId\": \"a494829e-b008-4d2f-b7d6-e185135a8e37\",\n" +
+                        "  \"name\": \"I'm a mocked shopping list\",\n" +
+                        "  \"ingredients\": [\n" +
+                        "          \"Tequila\",\n" +
+                        "          \"Triple sec\",\n" +
+                        "          \"Lime juice\",\n" +
+                        "          \"Salt\",\n" +
+                        "          \"Blue Curacao\"\n" +
+                        "        ]\n" +
+                        "}"))
         ;
     }
 
@@ -106,16 +121,16 @@ public class ShoppingListControllerTest extends AbstractTest {
     @Test
     public void testAddToShoppingList() throws Exception {
         this.mockMvc.perform(
-                post(rootMapping + "/"+  UUID.randomUUID().toString() + "/cocktails")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content("[\n" +
-                        "  {\n" +
-                        "    \"cocktailId\": \"23b3d85a-3928-41c0-a533-6538a71e17c4\"\n" +
-                        "  },\n" +
-                        "  {\n" +
-                        "    \"cocktailId\": \"d615ec78-fe93-467b-8d26-5d26d8eab073\"\n" +
-                        "  }\n" +
-                        "]")
+                post(rootMapping + "/" + UUID.randomUUID().toString() + "/cocktails")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("[\n" +
+                                "  {\n" +
+                                "    \"cocktailId\": \"23b3d85a-3928-41c0-a533-6538a71e17c4\"\n" +
+                                "  },\n" +
+                                "  {\n" +
+                                "    \"cocktailId\": \"d615ec78-fe93-467b-8d26-5d26d8eab073\"\n" +
+                                "  }\n" +
+                                "]")
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -133,6 +148,16 @@ public class ShoppingListControllerTest extends AbstractTest {
                         UUID.fromString("bb3b0178-5bd2-48e6-b0cc-e8d83115083f")
                 ).collect(Collectors.toSet())
         );
+    }
+
+    private List<String> mockedIngredients() {
+        List<String> ingredients = new ArrayList<>(5);
+        ingredients.add("Tequila");
+        ingredients.add("Triple sec");
+        ingredients.add("Lime juice");
+        ingredients.add("Salt");
+        ingredients.add("Blue Curacao");
+        return ingredients;
     }
 
 }
