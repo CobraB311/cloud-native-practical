@@ -4,11 +4,11 @@ package com.ezgroceries.shoppinglist.controller;
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.ezgroceries.shoppinglist.controller.model.request.ShoppingListRequest;
+import com.ezgroceries.shoppinglist.controller.model.response.CocktailIdResponse;
+import com.ezgroceries.shoppinglist.controller.model.response.ShoppingListResponse;
 import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
-import com.ezgroceries.shoppinglist.model.request.ShoppingListRequest;
-import com.ezgroceries.shoppinglist.model.response.CocktailIdResponse;
-import com.ezgroceries.shoppinglist.model.response.ShoppingListResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.hateoas.Resource;
