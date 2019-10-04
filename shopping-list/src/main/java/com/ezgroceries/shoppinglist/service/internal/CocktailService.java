@@ -8,9 +8,13 @@ import com.ezgroceries.shoppinglist.model.CocktailResource;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public interface CocktailService {
 
     List<CocktailResource> searchCocktails(@Nonnull String search);
+
+    List<String> searchDistinctIngredients(Set<UUID> cocktailIds);
 
 }

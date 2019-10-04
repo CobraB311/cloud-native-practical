@@ -59,6 +59,13 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         }).orElseThrow(() -> new RuntimeException("No shopping list found for: '" + shoppingListId + "'. You first need to create one."));
     }
 
+    @Override
+    public ShoppingList searchShoppingList(@Nonnull UUID id) {
+        final ShoppingListEntity entity = this.shoppingListRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Could not find shopping list with id: '" + id + "'."));
+        return createShoppingList(entity);
+    }
+
     private ShoppingListEntity createEntity(ShoppingList shoppingList) {
         ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(shoppingList.getShoppingListId());

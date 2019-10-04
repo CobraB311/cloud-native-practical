@@ -19,10 +19,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -51,6 +53,7 @@ public class ShoppingListControllerTest extends AbstractTest {
     public void initialize() {
         when(cocktailService.searchCocktails(anyString())).thenReturn(mockedCocktails());
         when(shoppingListService.create(any())).thenReturn(mockedShoppingList());
+        when(shoppingListService.addCocktails(any(), anySet())).thenReturn(mockedShoppingList());
     }
 
     @Test
@@ -126,7 +129,9 @@ public class ShoppingListControllerTest extends AbstractTest {
         return new ShoppingList(
                 UUID.fromString("a494829e-b008-4d2f-b7d6-e185135a8e37"),
                 "I'm a mocked shopping list",
-                new HashSet<>()
+                Stream.of(
+                        UUID.fromString("bb3b0178-5bd2-48e6-b0cc-e8d83115083f")
+                ).collect(Collectors.toSet())
         );
     }
 

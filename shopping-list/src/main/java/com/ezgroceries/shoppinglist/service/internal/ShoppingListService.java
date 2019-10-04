@@ -16,4 +16,6 @@ public interface ShoppingListService {
 
     ShoppingList addCocktails(@Nonnull UUID shoppingListId, Set<UUID> cocktailIds);
 
+    ShoppingList searchShoppingList(@Nonnull UUID id);
+
 }

@@ -43,6 +43,18 @@ public class CocktailServiceImpl implements CocktailService {
         return mergeCocktails(cocktailResources);
     }
 
+    @Override
+    public List<String> searchDistinctIngredients(Set<UUID> cocktailIds) {
+        if (cocktailIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        final List<CocktailEntity> entities = this.repository.findAllById(cocktailIds);
+        if (entities.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return entities.stream().flatMap(set -> set.getIngredients().stream()).distinct().collect(Collectors.toList());
+    }
+
     private List<CocktailResource> mergeCocktails(List<CocktailResource> drinks) {
 
         if (drinks.isEmpty()) {

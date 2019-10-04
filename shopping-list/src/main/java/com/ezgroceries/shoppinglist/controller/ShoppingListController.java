@@ -9,6 +9,7 @@ import com.ezgroceries.shoppinglist.controller.model.request.ShoppingListRequest
 import com.ezgroceries.shoppinglist.controller.model.response.CocktailIdResponse;
 import com.ezgroceries.shoppinglist.controller.model.response.ShoppingListResponse;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.service.internal.CocktailService;
 import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -39,10 +40,12 @@ import java.util.stream.Collectors;
 public class ShoppingListController {
 
     private final ShoppingListService shoppingListService;
+    private final CocktailService cocktailService;
 
     @Autowired
-    public ShoppingListController(ShoppingListService shoppingListService) {
+    public ShoppingListController(ShoppingListService shoppingListService, CocktailService cocktailService) {
         this.shoppingListService = shoppingListService;
+        this.cocktailService = cocktailService;
     }
 
     @ApiOperation(value = "Get all shopping lists")
@@ -69,13 +72,12 @@ public class ShoppingListController {
     @ApiOperation(value = "Get shopping list by id")
     @GetMapping(value = "/{shoppingListId}")
     public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
-        ShoppingList dummyShoppingList = createDummyShoppingList(
-                id, "Stephanie's birthday"
-        );
+        ShoppingList shoppingList = this.shoppingListService.searchShoppingList(UUID.fromString(id));
+        List<String> ingredients = this.cocktailService.searchDistinctIngredients(shoppingList.getCocktailIds());
         ShoppingListResponse response = new ShoppingListResponse(
-                dummyShoppingList.getShoppingListId().toString(),
-                dummyShoppingList.getName(),
-                createDummyIngredients()
+                shoppingList.getShoppingListId().toString(),
+                shoppingList.getName(),
+                ingredients
         );
         return new Resource<>(response);
 
@@ -104,14 +106,6 @@ public class ShoppingListController {
     @PostMapping(value = "/{shoppingListId}/cocktails")
     public Resources<CocktailIdResponse> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailRequest> cocktails) {
         return new Resources<>(addCocktailsToShoppingList(id, cocktails));
-    }
-
-    private ShoppingList createDummyShoppingList(String id, String name) {
-        return new ShoppingList(
-                UUID.fromString(id),
-                name,
-                new HashSet<>()
-        );
     }
 
     private Set<CocktailIdResponse> addCocktailsToShoppingList(String id, List<CocktailRequest> cocktails) {
