@@ -9,8 +9,10 @@ import com.ezgroceries.shoppinglist.controller.model.response.CocktailIdResponse
 import com.ezgroceries.shoppinglist.controller.model.response.ShoppingListResponse;
 import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,13 @@ import java.util.stream.Collectors;
 @Api(tags = "Shopping lists")
 @RequestMapping(value = "/shopping-lists", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ShoppingListController {
+
+    private final ShoppingListService shoppingListService;
+
+    @Autowired
+    public ShoppingListController(ShoppingListService shoppingListService) {
+        this.shoppingListService = shoppingListService;
+    }
 
     @ApiOperation(value = "Get all shopping lists")
     @GetMapping
@@ -74,11 +83,16 @@ public class ShoppingListController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Resource<ShoppingListResponse> newShoppingList(@RequestBody ShoppingListRequest list) {
-        ShoppingList dummyShoppingList = createDummyShoppingList("eb18bb7c-61f3-4c9f-981c-55b1b8ee8915", list.getName());
+        final ShoppingList shoppingList = this.shoppingListService.create(
+                new ShoppingList(
+                        UUID.randomUUID(),
+                        list.getName()
+                )
+        );
         return new Resource<>(
                 new ShoppingListResponse(
-                        dummyShoppingList.getShoppingListId().toString(),
-                        dummyShoppingList.getName()
+                        shoppingList.getShoppingListId().toString(),
+                        shoppingList.getName()
                 )
         );
     }

@@ -4,11 +4,16 @@ package com.ezgroceries.shoppinglist;
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.service.internal.CocktailService;
+import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,6 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -25,12 +33,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ShoppingListControllerTest {
+public class ShoppingListControllerTest extends AbstractTest {
 
     private final String rootMapping = "/shopping-lists";
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private CocktailService cocktailService;
+
+    @MockBean
+    private ShoppingListService shoppingListService;
+
+    @Before
+    public void initialize() {
+        when(cocktailService.searchCocktails(anyString())).thenReturn(mockedCocktails());
+        when(shoppingListService.create(any())).thenReturn(mockedShoppingList());
+    }
 
     @Test
     public void testGetAllShoppingList() throws Exception {
@@ -71,6 +91,11 @@ public class ShoppingListControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.shoppingListId").exists())
                 .andExpect(jsonPath("$.name").exists())
+                .andExpect(content().json("{\n" +
+                        "  \"shoppingListId\": \"a494829e-b008-4d2f-b7d6-e185135a8e37\",\n" +
+                        "  \"name\": \"I'm a mocked shopping list\",\n" +
+                        "  \"ingredients\": null\n" +
+                        "}"))
         ;
     }
 
@@ -94,6 +119,13 @@ public class ShoppingListControllerTest {
                         jsonPath("cocktailId").exists()
                 ).isArray())
         ;
+    }
+
+    private ShoppingList mockedShoppingList() {
+        return new ShoppingList(
+                UUID.fromString("a494829e-b008-4d2f-b7d6-e185135a8e37"),
+                "I'm a mocked shopping list"
+        );
     }
 
 }
