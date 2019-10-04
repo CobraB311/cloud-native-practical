@@ -5,12 +5,12 @@ package com.ezgroceries.shoppinglist.service.internal;
 */
 
 import com.ezgroceries.shoppinglist.model.CocktailResource;
-import com.ezgroceries.shoppinglist.service.external.client.model.CocktailDBResponse;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public interface CocktailService {
 
-    List<CocktailResource> mergeCocktails(List<CocktailDBResponse.DrinkResource> drinks);
+    List<CocktailResource> searchCocktails(@Nonnull String search);
 
 }

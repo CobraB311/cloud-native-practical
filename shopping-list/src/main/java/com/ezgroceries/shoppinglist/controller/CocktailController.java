@@ -5,7 +5,7 @@ package com.ezgroceries.shoppinglist.controller;
 */
 
 import com.ezgroceries.shoppinglist.model.CocktailResource;
-import com.ezgroceries.shoppinglist.service.external.CocktailExtService;
+import com.ezgroceries.shoppinglist.service.internal.CocktailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/cocktails", produces = "application/json")
 public class CocktailController {
 
-    private final CocktailExtService cocktailExtService;
+    private final CocktailService cocktailService;
 
     @Autowired
-    public CocktailController(CocktailExtService cocktailExtService) {
-        this.cocktailExtService = cocktailExtService;
+    public CocktailController(CocktailService cocktailService) {
+        this.cocktailService = cocktailService;
     }
 
     @ApiOperation(value = "Get all cocktails")
     @GetMapping
     public Resources<CocktailResource> get(@RequestParam String search) {
-        return new Resources<>(this.cocktailExtService.searchCocktails(search));
+        return new Resources<>(this.cocktailService.searchCocktails(search));
     }
 
 }
