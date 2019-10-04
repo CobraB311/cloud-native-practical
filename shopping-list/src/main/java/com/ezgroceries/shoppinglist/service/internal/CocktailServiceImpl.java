@@ -58,7 +58,10 @@ public class CocktailServiceImpl implements CocktailService {
             if (entity != null) {
                 return entity;
             }
-            return createEntity(d);
+            final CocktailEntity newEntity = createEntity(d);
+            repository.save(newEntity);
+            repository.flush();
+            return newEntity;
         }).collect(Collectors.toMap(CocktailEntity::getIdDrink, o -> o, (o, o2) -> o));
 
         //Merge drinks and our entities, transform to CocktailResource instances
