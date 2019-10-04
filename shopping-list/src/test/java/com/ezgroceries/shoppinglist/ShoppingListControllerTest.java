@@ -7,6 +7,7 @@ package com.ezgroceries.shoppinglist;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.service.internal.CocktailService;
 import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +59,7 @@ public class ShoppingListControllerTest extends AbstractTest {
         when(shoppingListService.addCocktails(any(), anySet())).thenReturn(mockedShoppingList());
         when(shoppingListService.searchShoppingList(any())).thenReturn(mockedShoppingList());
         when(cocktailService.searchDistinctIngredients(any())).thenReturn(mockedIngredients());
+        when(shoppingListService.searchAllShoppingLists()).thenReturn(Lists.newArrayList(mockedShoppingList(), mockedShoppingList()));
     }
 
     @Test
@@ -72,6 +74,34 @@ public class ShoppingListControllerTest extends AbstractTest {
                         jsonPath("name").exists(),
                         jsonPath("ingredients").isArray()
                 ).exists())
+                .andExpect(content().json("{\n" +
+                        "  \"_embedded\": {\n" +
+                        "    \"shoppingListResponseList\": [\n" +
+                        "      {\n" +
+                        "        \"shoppingListId\": \"a494829e-b008-4d2f-b7d6-e185135a8e37\",\n" +
+                        "        \"name\": \"I'm a mocked shopping list\",\n" +
+                        "        \"ingredients\": [\n" +
+                        "          \"Tequila\",\n" +
+                        "          \"Triple sec\",\n" +
+                        "          \"Lime juice\",\n" +
+                        "          \"Salt\",\n" +
+                        "          \"Blue Curacao\"\n" +
+                        "        ]\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"shoppingListId\": \"a494829e-b008-4d2f-b7d6-e185135a8e37\",\n" +
+                        "        \"name\": \"I'm a mocked shopping list\",\n" +
+                        "        \"ingredients\": [\n" +
+                        "          \"Tequila\",\n" +
+                        "          \"Triple sec\",\n" +
+                        "          \"Lime juice\",\n" +
+                        "          \"Salt\",\n" +
+                        "          \"Blue Curacao\"\n" +
+                        "        ]\n" +
+                        "      }\n" +
+                        "    ]\n" +
+                        "  }\n" +
+                        "}"))
         ;
     }
 
