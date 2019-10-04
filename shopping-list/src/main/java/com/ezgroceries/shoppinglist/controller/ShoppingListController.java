@@ -4,12 +4,13 @@ package com.ezgroceries.shoppinglist.controller;
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.ezgroceries.shoppinglist.controller.model.request.CocktailRequest;
 import com.ezgroceries.shoppinglist.controller.model.request.ShoppingListRequest;
 import com.ezgroceries.shoppinglist.controller.model.response.CocktailIdResponse;
 import com.ezgroceries.shoppinglist.controller.model.response.ShoppingListResponse;
-import com.ezgroceries.shoppinglist.model.CocktailResource;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
+import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -86,7 +88,8 @@ public class ShoppingListController {
         final ShoppingList shoppingList = this.shoppingListService.create(
                 new ShoppingList(
                         UUID.randomUUID(),
-                        list.getName()
+                        list.getName(),
+                        new HashSet<>()
                 )
         );
         return new Resource<>(
@@ -99,24 +102,29 @@ public class ShoppingListController {
 
     @ApiOperation(value = "Add cocktails to shopping list by id")
     @PostMapping(value = "/{shoppingListId}/cocktails")
-    public Resources<CocktailIdResponse> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailResource> cocktails) {
-        return new Resources<>(addCocktailToShoppingList(id, cocktails));
+    public Resources<CocktailIdResponse> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailRequest> cocktails) {
+        return new Resources<>(addCocktailsToShoppingList(id, cocktails));
     }
 
     private ShoppingList createDummyShoppingList(String id, String name) {
         return new ShoppingList(
                 UUID.fromString(id),
-                name
+                name,
+                new HashSet<>()
         );
     }
 
-    private Set<CocktailIdResponse> addCocktailToShoppingList(String id, List<CocktailResource> cocktails) {
-        ShoppingList dummyShoppingList = createDummyShoppingList(id, "dummy" + id);
-        Set<UUID> cocktailIds = cocktails.stream().map(CocktailResource::getCocktailId).collect(Collectors.toSet());
-        dummyShoppingList.setCocktailIds(cocktailIds);
+    private Set<CocktailIdResponse> addCocktailsToShoppingList(String id, List<CocktailRequest> cocktails) {
+        if (Strings.isNullOrEmpty(id) || cocktails.isEmpty()) {
+            return new HashSet<>();
+        }
+        final ShoppingList shoppingList = this.shoppingListService.addCocktails(
+                UUID.fromString(id),
+                cocktails.stream().map(CocktailRequest::getCocktailId).collect(Collectors.toSet())
+        );
 
         // Return only id's
-        return cocktails.stream().map(c -> new CocktailIdResponse(c.getCocktailId().toString())).collect(Collectors.toSet());
+        return shoppingList.getCocktailIds().stream().map(c -> new CocktailIdResponse(c.toString())).collect(Collectors.toSet());
     }
 
     private List<String> createDummyIngredients() {

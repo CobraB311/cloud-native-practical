@@ -16,9 +16,10 @@ public class ShoppingList {
     private String name;
     private Set<UUID> cocktailIds;
 
-    public ShoppingList(UUID shoppingListId, String name) {
+    public ShoppingList(UUID shoppingListId, String name, Set<UUID> cocktailIds) {
         this.shoppingListId = shoppingListId;
         this.name = name;
+        this.cocktailIds = cocktailIds;
     }
 
     public UUID getShoppingListId() {

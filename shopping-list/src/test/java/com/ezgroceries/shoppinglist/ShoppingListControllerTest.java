@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashSet;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -124,7 +125,8 @@ public class ShoppingListControllerTest extends AbstractTest {
     private ShoppingList mockedShoppingList() {
         return new ShoppingList(
                 UUID.fromString("a494829e-b008-4d2f-b7d6-e185135a8e37"),
-                "I'm a mocked shopping list"
+                "I'm a mocked shopping list",
+                new HashSet<>()
         );
     }
 
