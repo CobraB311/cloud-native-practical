@@ -26,7 +26,7 @@ public class ShoppingListEntity {
     @Column(name = "ID", unique = true, nullable = false)
     private UUID id;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique = true)
     private String name;
 
     @ManyToMany
