@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -36,7 +37,7 @@ public class CocktailEntity {
 
     @Convert(converter = StringSetConverter.class)
     @Column(name = "INGREDIENTS")
-    private List<String> ingredients;
+    private Set<String> ingredients;
 
     @ManyToMany
     @JoinTable(
@@ -70,11 +71,11 @@ public class CocktailEntity {
         this.name = name;
     }
 
-    public List<String> getIngredients() {
+    public Set<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(Set<String> ingredients) {
         this.ingredients = ingredients;
     }
 

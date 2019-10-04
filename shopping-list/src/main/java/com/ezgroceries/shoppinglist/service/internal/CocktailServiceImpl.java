@@ -89,6 +89,7 @@ public class CocktailServiceImpl implements CocktailService {
         entity.setId(UUID.randomUUID());
         entity.setIdDrink(drink.getDrinkId());
         entity.setName(drink.getName());
+        entity.setIngredients(drink.getIngredients());
         return entity;
     }
 

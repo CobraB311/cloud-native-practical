@@ -9,6 +9,7 @@ import com.google.common.base.Strings;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -135,7 +136,7 @@ public class CocktailDBResponse {
             this.strIngredient7 = strIngredient7;
         }
 
-        public List<String> getIngredients() {
+        public Set<String> getIngredients() {
             return Stream.of(
                     this.getStrIngredient1(),
                     this.getStrIngredient2(),
@@ -147,7 +148,7 @@ public class CocktailDBResponse {
             ).filter(
                     i -> !Strings.isNullOrEmpty(i)
             ).collect(
-                    Collectors.toList()
+                    Collectors.toSet()
             );
         }
 
