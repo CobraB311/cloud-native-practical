@@ -28,7 +28,7 @@ public class CocktailEntity {
     @Column(name = "ID", unique = true, nullable = false)
     private UUID id;
 
-    @Column(name = "ID_DRINK")
+    @Column(name = "ID_DRINK", unique = true)
     private String idDrink;
 
     @Column(name = "NAME")

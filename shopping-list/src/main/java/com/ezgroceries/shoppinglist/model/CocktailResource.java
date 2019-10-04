@@ -13,14 +13,16 @@ import java.util.UUID;
 public class CocktailResource {
 
     private UUID cocktailId;
+    private String drinkId;
     private String name;
     private String glass;
     private String instructions;
     private String image;
     private List<String> ingredients;
 
-    public CocktailResource(UUID cocktailId, String name, String glass, String instructions, String image, List<String> ingredients) {
+    public CocktailResource(UUID cocktailId, String drinkId, String name, String glass, String instructions, String image, List<String> ingredients) {
         this.cocktailId = cocktailId;
+        this.drinkId = drinkId;
         this.name = name;
         this.glass = glass;
         this.instructions = instructions;
@@ -79,9 +81,17 @@ public class CocktailResource {
         this.ingredients = ingredients;
     }
 
+    public String getDrinkId() {
+        return drinkId;
+    }
+
+    public void setDrinkId(String drinkId) {
+        this.drinkId = drinkId;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(cocktailId, name, glass, instructions, image, ingredients);
+        return Objects.hash(cocktailId, drinkId, name, glass, instructions, image, ingredients);
     }
 
     @Override
@@ -94,6 +104,7 @@ public class CocktailResource {
         }
         final CocktailResource other = (CocktailResource) obj;
         return Objects.equals(this.cocktailId, other.cocktailId)
+                && Objects.equals(this.drinkId, other.drinkId)
                 && Objects.equals(this.name, other.name)
                 && Objects.equals(this.glass, other.glass)
                 && Objects.equals(this.instructions, other.instructions)
@@ -105,6 +116,7 @@ public class CocktailResource {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("cocktailId", cocktailId)
+                .add("drinkId", drinkId)
                 .add("name", name)
                 .add("glass", glass)
                 .add("instructions", instructions)

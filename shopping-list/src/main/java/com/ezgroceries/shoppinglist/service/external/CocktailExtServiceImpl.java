@@ -37,6 +37,7 @@ public class CocktailExtServiceImpl implements CocktailExtService {
 
         return response.getDrinks().stream().map(d -> new CocktailResource(
                 UUID.randomUUID(),
+                d.getIdDrink(), // TODO - Should we return this to FE?
                 d.getStrDrink(),
                 d.getStrGlass(),
                 d.getStrInstructions(),
