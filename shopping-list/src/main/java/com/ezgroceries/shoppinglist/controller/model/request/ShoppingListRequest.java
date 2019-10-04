@@ -1,11 +1,12 @@
-package com.ezgroceries.shoppinglist.model.request;
+package com.ezgroceries.shoppinglist.controller.model.request;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public class ShoppingListRequest {
 
@@ -45,8 +46,8 @@ public class ShoppingListRequest {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ShoppingListRequest.class.getSimpleName() + "[", "]")
-                .add("name='" + name + "'")
+        return MoreObjects.toStringHelper(this)
+                .add("name", name)
                 .toString();
     }
 

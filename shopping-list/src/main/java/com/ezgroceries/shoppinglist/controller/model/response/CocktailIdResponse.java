@@ -1,4 +1,4 @@
-package com.ezgroceries.shoppinglist.model.response;
+package com.ezgroceries.shoppinglist.controller.model.response;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019

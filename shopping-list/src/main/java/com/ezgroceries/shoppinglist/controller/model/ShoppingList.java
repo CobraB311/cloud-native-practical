@@ -1,12 +1,13 @@
-package com.ezgroceries.shoppinglist.model;
+package com.ezgroceries.shoppinglist.controller.model;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.google.common.base.MoreObjects;
+
 import java.util.Objects;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.UUID;
 
 public class ShoppingList {
@@ -65,10 +66,10 @@ public class ShoppingList {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ShoppingList.class.getSimpleName() + "[", "]")
-                .add("shoppingListId=" + shoppingListId)
-                .add("name='" + name + "'")
-                .add("cocktailIds=" + cocktailIds)
+        return MoreObjects.toStringHelper(this)
+                .add("shoppingListId", shoppingListId)
+                .add("name", name)
+                .add("cocktailIds", cocktailIds)
                 .toString();
     }
 

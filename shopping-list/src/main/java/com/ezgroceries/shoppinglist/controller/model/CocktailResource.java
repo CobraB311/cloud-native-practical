@@ -1,12 +1,13 @@
-package com.ezgroceries.shoppinglist.model;
+package com.ezgroceries.shoppinglist.controller.model;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.google.common.base.MoreObjects;
+
 import java.util.List;
 import java.util.Objects;
-import java.util.StringJoiner;
 import java.util.UUID;
 
 public class CocktailResource {
@@ -102,13 +103,13 @@ public class CocktailResource {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", CocktailResource.class.getSimpleName() + "[", "]")
-                .add("cocktailId=" + cocktailId)
-                .add("name='" + name + "'")
-                .add("glass='" + glass + "'")
-                .add("instructions='" + instructions + "'")
-                .add("image='" + image + "'")
-                .add("ingredients=" + ingredients)
+        return MoreObjects.toStringHelper(this)
+                .add("cocktailId", cocktailId)
+                .add("name", name)
+                .add("glass", glass)
+                .add("instructions", instructions)
+                .add("image", image)
+                .add("ingredients", ingredients)
                 .toString();
     }
 
