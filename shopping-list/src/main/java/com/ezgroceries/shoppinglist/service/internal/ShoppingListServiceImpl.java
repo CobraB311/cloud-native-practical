@@ -10,6 +10,7 @@ import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
@@ -64,6 +65,15 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         final ShoppingListEntity entity = this.shoppingListRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Could not find shopping list with id: '" + id + "'."));
         return createShoppingList(entity);
+    }
+
+    @Override
+    public List<ShoppingList> searchAllShoppingLists() {
+        final List<ShoppingListEntity> entities = this.shoppingListRepository.findAll(Sort.by(Sort.Order.asc("name")));
+        if (entities.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return entities.stream().map(this::createShoppingList).collect(Collectors.toList());
     }
 
     private ShoppingListEntity createEntity(ShoppingList shoppingList) {

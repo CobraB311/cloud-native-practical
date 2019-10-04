@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,21 +50,8 @@ public class ShoppingListController {
     @ApiOperation(value = "Get all shopping lists")
     @GetMapping
     public Resources<ShoppingListResponse> getAllShoppingList() {
-        List<ShoppingListResponse> responses = new ArrayList<>(2);
-        responses.add(
-                new ShoppingListResponse(
-                        "4ba92a46-1d1b-4e52-8e38-13cd56c7224c",
-                        "Stephanie's birthday",
-                        createDummyIngredients()
-                )
-        );
-        responses.add(
-                new ShoppingListResponse(
-                        "6c7d09c2-8a25-4d54-a979-25ae779d2465",
-                        "My Birthday",
-                        createDummyIngredients()
-                )
-        );
+        List<ShoppingList> shoppingLists = this.shoppingListService.searchAllShoppingLists();
+        List<ShoppingListResponse> responses = shoppingLists.stream().map(this::createShoppingListResponseWithIngredients).collect(Collectors.toList());
         return new Resources<>(responses);
     }
 
@@ -73,12 +59,7 @@ public class ShoppingListController {
     @GetMapping(value = "/{shoppingListId}")
     public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
         ShoppingList shoppingList = this.shoppingListService.searchShoppingList(UUID.fromString(id));
-        List<String> ingredients = this.cocktailService.searchDistinctIngredients(shoppingList.getCocktailIds());
-        ShoppingListResponse response = new ShoppingListResponse(
-                shoppingList.getShoppingListId().toString(),
-                shoppingList.getName(),
-                ingredients
-        );
+        ShoppingListResponse response = createShoppingListResponseWithIngredients(shoppingList);
         return new Resource<>(response);
 
     }
@@ -121,14 +102,13 @@ public class ShoppingListController {
         return shoppingList.getCocktailIds().stream().map(c -> new CocktailIdResponse(c.toString())).collect(Collectors.toSet());
     }
 
-    private List<String> createDummyIngredients() {
-        List<String> ingredients =  new ArrayList<>(5);
-        ingredients.add("Tequila");
-        ingredients.add("Triple sec");
-        ingredients.add("Lime juice");
-        ingredients.add("Salt");
-        ingredients.add("Blue Curacao");
-        return ingredients;
+    private ShoppingListResponse createShoppingListResponseWithIngredients(ShoppingList shoppingList) {
+        List<String> ingredients = this.cocktailService.searchDistinctIngredients(shoppingList.getCocktailIds());
+        return new ShoppingListResponse(
+                shoppingList.getShoppingListId().toString(),
+                shoppingList.getName(),
+                ingredients
+        );
     }
 
 }

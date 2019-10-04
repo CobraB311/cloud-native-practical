@@ -7,6 +7,7 @@ package com.ezgroceries.shoppinglist.service.internal;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,5 +18,7 @@ public interface ShoppingListService {
     ShoppingList addCocktails(@Nonnull UUID shoppingListId, Set<UUID> cocktailIds);
 
     ShoppingList searchShoppingList(@Nonnull UUID id);
+
+    List<ShoppingList> searchAllShoppingLists();
 
 }
