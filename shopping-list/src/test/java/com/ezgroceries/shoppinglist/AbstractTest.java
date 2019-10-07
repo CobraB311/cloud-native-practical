@@ -64,7 +64,7 @@ public abstract class AbstractTest {
     protected ShoppingListEntity mockedShoppingListEntity() {
         final ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(UUID.fromString("94511c9b-6ee9-491c-acc3-07e45142ca2f"));
-        entity.setName("Mocked shopping list entity");
+        entity.setName("A - Mocked shopping list entity");
         entity.setCocktailEntities(Lists.newArrayList(
                 mockedCocktailEntity("bb3b0178-5bd2-48e6-b0cc-e8d83115083f"),
                 mockedCocktailEntity("dc24c940-fdbf-4de4-9531-dd89df76bb08")));
@@ -74,7 +74,7 @@ public abstract class AbstractTest {
     protected ShoppingListEntity mockedShoppingListEntityNoCocktails() {
         final ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(UUID.fromString("ca582a63-bf0e-47a8-a8d6-4aea840a04b0"));
-        entity.setName("Mocked shopping list entity");
+        entity.setName("B - Mocked shopping list entity no cocktails");
         entity.setCocktailEntities(new ArrayList<>());
         return entity;
     }

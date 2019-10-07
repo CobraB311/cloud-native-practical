@@ -10,12 +10,16 @@ import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
+import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Sort;
 
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -56,6 +60,10 @@ public class ShoppingListServiceTest extends AbstractTest {
         when(cocktailRepository.findAllById(mockedShoppingList().getCocktailIds())).thenReturn(
                 mockedShoppingListEntity().getCocktailEntities()
         );
+
+        List<ShoppingListEntity> shoppingListEntities = Lists.newArrayList(mockedShoppingListEntityNoCocktails(), mockedShoppingListEntity());
+        shoppingListEntities.sort(Comparator.comparing(ShoppingListEntity::getName));
+        when(shoppingListRepository.findAll(Sort.by(Sort.Order.asc("name")))).thenReturn(shoppingListEntities);
     }
 
     @Test
@@ -90,6 +98,14 @@ public class ShoppingListServiceTest extends AbstractTest {
     @Test(expected = RuntimeException.class)
     public void searchNonExistingShoppingList() {
         shoppingListService.searchShoppingList(UUID.randomUUID());
+    }
+
+    @Test
+    public void searchAllShoppingLists() {
+        final List<ShoppingList> shoppingLists = shoppingListService.searchAllShoppingLists();
+        // Should always be sorted asc on name
+        checkShoppingListEntity(shoppingLists.get(0));
+        checkShoppingListEntityEmptyCocktails(shoppingLists.get(1));
     }
 
     private void checkShoppingListEntity(ShoppingList shoppingList) {
