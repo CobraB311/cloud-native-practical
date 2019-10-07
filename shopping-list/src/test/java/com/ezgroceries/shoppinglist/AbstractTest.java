@@ -79,7 +79,7 @@ public abstract class AbstractTest {
         return entity;
     }
 
-    protected CocktailEntity mockedCocktailEntity(String uuid) {
+    private CocktailEntity mockedCocktailEntity(String uuid) {
         final CocktailEntity entity = new CocktailEntity();
         entity.setId(UUID.fromString(uuid));
         entity.setName("Mocked cocktail entity");

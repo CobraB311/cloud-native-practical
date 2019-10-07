@@ -6,6 +6,7 @@ package com.ezgroceries.shoppinglist.service.internal;
 
 import com.ezgroceries.shoppinglist.AbstractTest;
 import com.ezgroceries.shoppinglist.model.CocktailResource;
+import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.service.external.CocktailExtService;
 import org.junit.Before;
@@ -16,10 +17,12 @@ import org.mockito.MockitoAnnotations;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.when;
 
 public class CocktailServiceTest extends AbstractTest {
@@ -39,12 +42,20 @@ public class CocktailServiceTest extends AbstractTest {
         cocktailService = new CocktailServiceImpl(cocktailRepository, cocktailExtService);
 
         when(cocktailExtService.searchCocktails("test")).thenReturn(mockedCocktails());
+        when(cocktailRepository.findAllById(anySet())).thenReturn(mockedShoppingListEntity().getCocktailEntities());
     }
 
     @Test
     public void searchCocktails() {
         final List<CocktailResource> cocktails = cocktailService.searchCocktails("test");
         checkCocktails(cocktails);
+    }
+
+    @Test
+    public void searchDistinctIngredients() {
+        final List<String> ingredients = cocktailService.searchDistinctIngredients(mockedShoppingListEntity().getCocktailEntities().stream().map(CocktailEntity::getId).collect(Collectors.toSet()));
+        assertEquals(mockedIngredients().size(), ingredients.size());
+        assertTrue(mockedIngredients().containsAll(ingredients));
     }
 
     private void checkCocktails(List<CocktailResource> cocktails) {
