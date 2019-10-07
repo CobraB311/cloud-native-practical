@@ -29,6 +29,9 @@ import static org.mockito.Mockito.when;
 
 public class ShoppingListServiceTest extends AbstractTest {
 
+    private static final String SHOPPING_LIST_WITH_COCKTAILS = "94511c9b-6ee9-491c-acc3-07e45142ca2f";
+    private static final String SHOPPING_LIST_NO_COCKTAILS = "ca582a63-bf0e-47a8-a8d6-4aea840a04b0";
+
     @Mock
     private ShoppingListRepository shoppingListRepository;
 
@@ -46,9 +49,9 @@ public class ShoppingListServiceTest extends AbstractTest {
         when(shoppingListRepository.findByName(anyString())).thenReturn(mockedShoppingListEntity());
         when(shoppingListRepository.save(any(ShoppingListEntity.class))).thenReturn(mockedShoppingListEntity());
 
-        when(shoppingListRepository.findById(UUID.fromString("94511c9b-6ee9-491c-acc3-07e45142ca2f")))
+        when(shoppingListRepository.findById(UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS)))
                 .thenReturn(Optional.of(mockedShoppingListEntity()));
-        when(shoppingListRepository.findById(UUID.fromString("ca582a63-bf0e-47a8-a8d6-4aea840a04b0")))
+        when(shoppingListRepository.findById(UUID.fromString(SHOPPING_LIST_NO_COCKTAILS)))
                 .thenReturn(Optional.of(mockedShoppingListEntityNoCocktails()));
         when(cocktailRepository.findAllById(mockedShoppingList().getCocktailIds())).thenReturn(
                 mockedShoppingListEntity().getCocktailEntities()
@@ -58,21 +61,18 @@ public class ShoppingListServiceTest extends AbstractTest {
     @Test
     public void createShoppingList() {
         final ShoppingList shoppingList = shoppingListService.create(mockedShoppingList());
-        assertNotNull(shoppingList);
         checkShoppingListEntity(shoppingList);
     }
 
     @Test
     public void addCocktails() {
-        final ShoppingList shoppingList = shoppingListService.addCocktails(UUID.fromString("94511c9b-6ee9-491c-acc3-07e45142ca2f"), mockedShoppingList().getCocktailIds());
-        assertNotNull(shoppingList);
+        final ShoppingList shoppingList = shoppingListService.addCocktails(UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS), mockedShoppingList().getCocktailIds());
         checkShoppingListEntity(shoppingList);
     }
 
     @Test
     public void addEmptyCocktailList() {
-        final ShoppingList shoppingList = shoppingListService.addCocktails(UUID.fromString("ca582a63-bf0e-47a8-a8d6-4aea840a04b0"), new HashSet<>());
-        assertNotNull(shoppingList);
+        final ShoppingList shoppingList = shoppingListService.addCocktails(UUID.fromString(SHOPPING_LIST_NO_COCKTAILS), new HashSet<>());
         checkShoppingListEntityEmptyCocktails(shoppingList);
     }
 
@@ -81,13 +81,26 @@ public class ShoppingListServiceTest extends AbstractTest {
         shoppingListService.addCocktails(UUID.randomUUID(), new HashSet<>());
     }
 
+    @Test
+    public void searchShoppingList() {
+        final ShoppingList shoppingList = shoppingListService.searchShoppingList(UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS));
+        checkShoppingListEntity(shoppingList);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void searchNonExistingShoppingList() {
+        shoppingListService.searchShoppingList(UUID.randomUUID());
+    }
+
     private void checkShoppingListEntity(ShoppingList shoppingList) {
+        assertNotNull(shoppingList);
         assertEquals(mockedShoppingListEntity().getId(), shoppingList.getShoppingListId());
         assertEquals(mockedShoppingListEntity().getName(), shoppingList.getName());
         checkCocktailEntity(shoppingList.getCocktailIds());
     }
 
     private void checkShoppingListEntityEmptyCocktails(ShoppingList shoppingList) {
+        assertNotNull(shoppingList);
         assertEquals(mockedShoppingListEntityNoCocktails().getId(), shoppingList.getShoppingListId());
         assertEquals(mockedShoppingListEntityNoCocktails().getName(), shoppingList.getName());
         assertEquals(mockedShoppingListEntityNoCocktails().getCocktailEntities().size(), shoppingList.getCocktailIds().size());
