@@ -1,10 +1,10 @@
-package com.ezgroceries.shoppinglist;
+package com.ezgroceries.shoppinglist.controller;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
-import com.ezgroceries.shoppinglist.model.ShoppingList;
+import com.ezgroceries.shoppinglist.AbstractTest;
 import com.ezgroceries.shoppinglist.service.internal.CocktailService;
 import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
 import org.assertj.core.util.Lists;
@@ -20,11 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anySet;
@@ -168,26 +164,6 @@ public class ShoppingListControllerTest extends AbstractTest {
                         jsonPath("cocktailId").exists()
                 ).isArray())
         ;
-    }
-
-    private ShoppingList mockedShoppingList() {
-        return new ShoppingList(
-                UUID.fromString("a494829e-b008-4d2f-b7d6-e185135a8e37"),
-                "I'm a mocked shopping list",
-                Stream.of(
-                        UUID.fromString("bb3b0178-5bd2-48e6-b0cc-e8d83115083f")
-                ).collect(Collectors.toSet())
-        );
-    }
-
-    private List<String> mockedIngredients() {
-        List<String> ingredients = new ArrayList<>(5);
-        ingredients.add("Tequila");
-        ingredients.add("Triple sec");
-        ingredients.add("Lime juice");
-        ingredients.add("Salt");
-        ingredients.add("Blue Curacao");
-        return ingredients;
     }
 
 }

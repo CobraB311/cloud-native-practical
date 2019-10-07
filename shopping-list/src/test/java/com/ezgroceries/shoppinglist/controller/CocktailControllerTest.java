@@ -1,9 +1,10 @@
-package com.ezgroceries.shoppinglist;
+package com.ezgroceries.shoppinglist.controller;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019
 */
 
+import com.ezgroceries.shoppinglist.AbstractTest;
 import com.ezgroceries.shoppinglist.service.internal.CocktailService;
 import org.junit.Before;
 import org.junit.Test;
