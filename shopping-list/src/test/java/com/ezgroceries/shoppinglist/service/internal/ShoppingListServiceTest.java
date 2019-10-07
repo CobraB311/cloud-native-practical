@@ -76,6 +76,11 @@ public class ShoppingListServiceTest extends AbstractTest {
         checkShoppingListEntityEmptyCocktails(shoppingList);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void addCocktailsToNonExistingShoppingList() {
+        shoppingListService.addCocktails(UUID.randomUUID(), new HashSet<>());
+    }
+
     private void checkShoppingListEntity(ShoppingList shoppingList) {
         assertEquals(mockedShoppingListEntity().getId(), shoppingList.getShoppingListId());
         assertEquals(mockedShoppingListEntity().getName(), shoppingList.getName());
