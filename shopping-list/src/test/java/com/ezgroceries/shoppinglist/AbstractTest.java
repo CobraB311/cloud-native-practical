@@ -9,6 +9,7 @@ import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import org.assertj.core.util.Lists;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@ActiveProfiles(value = "hsqldb")
 public abstract class AbstractTest {
 
     protected List<CocktailResource> mockedCocktails() {
