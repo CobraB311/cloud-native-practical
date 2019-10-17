@@ -15,4 +15,6 @@ public interface CocktailRepository extends JpaRepository<CocktailEntity, UUID> 
 
     List<CocktailEntity> findByIdDrinkIn(Set<String> ids);
 
+    List<CocktailEntity> findByNameContainingIgnoreCase(String name);
+
 }
