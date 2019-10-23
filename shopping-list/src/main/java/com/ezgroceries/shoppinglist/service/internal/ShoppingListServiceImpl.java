@@ -91,6 +91,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         return new ShoppingList(
                 entity.getId(),
                 entity.getName(),
+                entity.getUserId(),
                 entity.getCocktailEntities().stream().map(CocktailEntity::getId).collect(Collectors.toSet())
         );
     }

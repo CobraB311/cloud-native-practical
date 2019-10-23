@@ -5,6 +5,7 @@ package com.ezgroceries.shoppinglist.service.internal;
 */
 
 import com.ezgroceries.shoppinglist.model.ShoppingList;
+import org.springframework.security.access.prepost.PostAuthorize;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -17,6 +18,7 @@ public interface ShoppingListService {
 
     ShoppingList addCocktails(@Nonnull UUID shoppingListId, Set<UUID> cocktailIds);
 
+    @PostAuthorize("returnObject.userName.equals(authentication.name)")
     ShoppingList searchShoppingList(@Nonnull UUID id);
 
     List<ShoppingList> searchAllShoppingLists();

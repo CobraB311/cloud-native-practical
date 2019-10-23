@@ -14,11 +14,19 @@ public class ShoppingList {
 
     private UUID shoppingListId;
     private String name;
+    private String userName;
     private Set<UUID> cocktailIds;
 
     public ShoppingList(UUID shoppingListId, String name, Set<UUID> cocktailIds) {
         this.shoppingListId = shoppingListId;
         this.name = name;
+        this.cocktailIds = cocktailIds;
+    }
+
+    public ShoppingList(UUID shoppingListId, String name, String userName, Set<UUID> cocktailIds) {
+        this.shoppingListId = shoppingListId;
+        this.name = name;
+        this.userName = userName;
         this.cocktailIds = cocktailIds;
     }
 
@@ -38,6 +46,14 @@ public class ShoppingList {
         this.name = name;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public Set<UUID> getCocktailIds() {
         return cocktailIds;
     }
@@ -48,7 +64,7 @@ public class ShoppingList {
 
     @Override
     public int hashCode() {
-        return Objects.hash(shoppingListId, name, cocktailIds);
+        return Objects.hash(shoppingListId, name, userName, cocktailIds);
     }
 
     @Override
@@ -62,6 +78,7 @@ public class ShoppingList {
         final ShoppingList other = (ShoppingList) obj;
         return Objects.equals(this.shoppingListId, other.shoppingListId)
                 && Objects.equals(this.name, other.name)
+                && Objects.equals(this.userName, other.userName)
                 && Objects.equals(this.cocktailIds, other.cocktailIds);
     }
 
