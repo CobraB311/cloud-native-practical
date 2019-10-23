@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String URI_LOGIN = "/login";
+    private static final String URI_COCKTAILS = "/cocktails";
 
     private final DataSource dataSource;
     private final AuthenticationSuccessRedirectHandler successHandler;
@@ -43,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(URI_LOGIN).permitAll()
+                .antMatchers(URI_COCKTAILS + "*").permitAll() // Test this with curl, because swagger needs authentication
                 .anyRequest().authenticated()
                 .and().formLogin().successHandler(successHandler)
         ;
