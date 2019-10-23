@@ -76,7 +76,9 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         if (entities.isEmpty()) {
             return new ArrayList<>();
         }
-        return entities.stream().map(this::createShoppingList).collect(Collectors.toList());
+        // Make sure only the shopping lists of the user are returned
+        return entities.stream().filter(e -> authenticationFacade.getUserName().equals(e.getUserId()))
+                .map(this::createShoppingList).collect(Collectors.toList());
     }
 
     private ShoppingListEntity createEntity(ShoppingList shoppingList) {
