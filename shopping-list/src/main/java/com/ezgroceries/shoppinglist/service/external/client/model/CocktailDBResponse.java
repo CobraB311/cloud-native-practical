@@ -156,7 +156,8 @@ public class CocktailDBResponse {
         public void setIngredients(List<String> ingredients) {
             if (!ingredients.isEmpty()) {
                 try {
-                    for (int i = 1; i <= ingredients.size(); i++) {
+                    int max = Math.min(ingredients.size(), 7);
+                    for (int i = 1; i <= max; i++) {
                         final String ingredient = ingredients.get(i - 1);
                         if (Strings.isNullOrEmpty(ingredient)) {
                             return; // Finish for loop because rest of ingredients will also be empty
