@@ -68,6 +68,7 @@ public class ShoppingListController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Resource<ShoppingListResponse> newShoppingList(@RequestBody ShoppingListRequest list) {
+        // TODO: Refactor this create method in service to have less code in controller - Looks for other places as well
         final ShoppingList shoppingList = this.shoppingListService.create(
                 new ShoppingList(
                         UUID.randomUUID(),
