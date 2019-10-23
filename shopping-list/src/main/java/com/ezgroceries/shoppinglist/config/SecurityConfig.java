@@ -8,6 +8,7 @@ import com.ezgroceries.shoppinglist.security.handler.AuthenticationSuccessRedire
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -49,10 +50,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(URI_LOGIN).permitAll()
                 .antMatchers(URI_COCKTAILS + "*").permitAll() // Test this with curl, because swagger needs authentication
                 .antMatchers(URI_SHOPPING_LISTS + "*").authenticated()
+                .antMatchers(HttpMethod.POST, URI_SHOPPING_LISTS + "*").authenticated()
                 .regexMatchers(URI_SWAGGER + "*").authenticated()
                 .antMatchers(URI_ACTUATOR + "*").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin().successHandler(successHandler)
+                .and().csrf().disable()
         ;
     }
 

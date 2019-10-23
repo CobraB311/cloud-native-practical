@@ -10,6 +10,7 @@ import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
+import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,13 +43,18 @@ public class ShoppingListServiceTest extends AbstractTest {
     @Mock
     private CocktailRepository cocktailRepository;
 
+    @Mock
+    private AuthenticationFacade authenticationFacade;
+
     private ShoppingListService shoppingListService;
 
     @Before
     public void initialize() {
         MockitoAnnotations.initMocks(this);
 
-        shoppingListService = new ShoppingListServiceImpl(shoppingListRepository, cocktailRepository);
+        shoppingListService = new ShoppingListServiceImpl(shoppingListRepository, cocktailRepository, authenticationFacade);
+
+        when(authenticationFacade.getUserName()).thenReturn("Test user");
 
         when(shoppingListRepository.findByName(anyString())).thenReturn(mockedShoppingListEntity());
         when(shoppingListRepository.save(any(ShoppingListEntity.class))).thenReturn(mockedShoppingListEntity());

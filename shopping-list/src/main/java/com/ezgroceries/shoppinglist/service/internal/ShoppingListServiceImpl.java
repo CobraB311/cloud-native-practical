@@ -9,6 +9,7 @@ import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
+import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,13 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
     private final ShoppingListRepository shoppingListRepository;
     private final CocktailRepository cocktailRepository;
+    private final AuthenticationFacade authenticationFacade;
 
     @Autowired
-    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailRepository cocktailRepository) {
+    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailRepository cocktailRepository, AuthenticationFacade authenticationFacade) {
         this.shoppingListRepository = shoppingListRepository;
         this.cocktailRepository = cocktailRepository;
+        this.authenticationFacade = authenticationFacade;
     }
 
     @Override
@@ -80,6 +83,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(shoppingList.getShoppingListId());
         entity.setName(shoppingList.getName());
+        entity.setUserId(authenticationFacade.getUserName());
         return entity;
     }
 

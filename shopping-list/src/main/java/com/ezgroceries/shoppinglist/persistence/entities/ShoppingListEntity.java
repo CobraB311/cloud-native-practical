@@ -29,6 +29,9 @@ public class ShoppingListEntity {
     @Column(name = "NAME", unique = true)
     private String name;
 
+    @Column(name = "USER_ID", nullable = false)
+    private String userId;
+
     @ManyToMany
     @JoinTable(
             name = "COCKTAIL_SHOPPING_LIST",
@@ -53,6 +56,14 @@ public class ShoppingListEntity {
         this.name = name;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public List<CocktailEntity> getCocktailEntities() {
         return cocktailEntities;
     }
@@ -63,7 +74,7 @@ public class ShoppingListEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, cocktailEntities);
+        return Objects.hash(id, name, userId, cocktailEntities);
     }
 
     @Override
@@ -77,6 +88,7 @@ public class ShoppingListEntity {
         final ShoppingListEntity other = (ShoppingListEntity) obj;
         return Objects.equals(this.id, other.id)
                 && Objects.equals(this.name, other.name)
+                && Objects.equals(this.userId, other.userId)
                 && Objects.equals(this.cocktailEntities, other.cocktailEntities);
     }
 
@@ -85,6 +97,7 @@ public class ShoppingListEntity {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
+                .add("userId", userId)
                 .add("cocktailEntities", cocktailEntities)
                 .toString();
     }
