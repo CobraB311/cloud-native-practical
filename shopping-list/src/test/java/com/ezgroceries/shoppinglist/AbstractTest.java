@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 @ActiveProfiles(value = "hsqldb")
 public abstract class AbstractTest {
 
+    protected String mockedUser = "Test user";
+
     protected List<CocktailResource> mockedCocktails() {
         return Arrays.asList(
                 new CocktailResource(
@@ -70,6 +72,7 @@ public abstract class AbstractTest {
         entity.setCocktailEntities(Lists.newArrayList(
                 mockedCocktailEntity("bb3b0178-5bd2-48e6-b0cc-e8d83115083f"),
                 mockedCocktailEntity("dc24c940-fdbf-4de4-9531-dd89df76bb08")));
+        entity.setUserId(mockedUser);
         return entity;
     }
 
@@ -78,6 +81,7 @@ public abstract class AbstractTest {
         entity.setId(UUID.fromString("ca582a63-bf0e-47a8-a8d6-4aea840a04b0"));
         entity.setName("B - Mocked shopping list entity no cocktails");
         entity.setCocktailEntities(new ArrayList<>());
+        entity.setUserId(mockedUser);
         return entity;
     }
 

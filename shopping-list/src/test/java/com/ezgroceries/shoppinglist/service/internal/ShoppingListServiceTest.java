@@ -54,7 +54,7 @@ public class ShoppingListServiceTest extends AbstractTest {
 
         shoppingListService = new ShoppingListServiceImpl(shoppingListRepository, cocktailRepository, authenticationFacade);
 
-        when(authenticationFacade.getUserName()).thenReturn("Test user");
+        when(authenticationFacade.getUserName()).thenReturn(mockedUser);
 
         when(shoppingListRepository.findByName(anyString())).thenReturn(mockedShoppingListEntity());
         when(shoppingListRepository.save(any(ShoppingListEntity.class))).thenReturn(mockedShoppingListEntity());
