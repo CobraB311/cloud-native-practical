@@ -1,4 +1,4 @@
-package com.ezgroceries.shoppinglist.service.external.client;
+package com.ezgroceries.shoppinglist.service.external;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/10/2019

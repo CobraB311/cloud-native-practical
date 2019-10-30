@@ -1,10 +1,11 @@
-package com.ezgroceries.shoppinglist.service.external.client;
+package com.ezgroceries.shoppinglist.service.external;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/10/2019
 */
 
 import com.ezgroceries.shoppinglist.model.MealResource;
+import com.ezgroceries.shoppinglist.service.external.client.MealDBClient;
 import com.ezgroceries.shoppinglist.service.external.client.model.MealDBResponse;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
