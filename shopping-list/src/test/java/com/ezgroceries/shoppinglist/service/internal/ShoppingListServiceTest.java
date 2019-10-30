@@ -74,7 +74,7 @@ public class ShoppingListServiceTest extends AbstractTest {
 
     @Test
     public void createShoppingList() {
-        final ShoppingList shoppingList = shoppingListService.create(mockedShoppingList());
+        final ShoppingList shoppingList = shoppingListService.create(mockedShoppingList().getName());
         checkShoppingListEntity(shoppingList);
     }
 

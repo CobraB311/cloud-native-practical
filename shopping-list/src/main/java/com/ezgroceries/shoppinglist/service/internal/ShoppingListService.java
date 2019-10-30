@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface ShoppingListService {
 
-    ShoppingList create(@Nonnull ShoppingList shoppingList);
+    ShoppingList create(@Nonnull String name);
 
     @PreAuthorize("@shoppingListServiceImpl.searchShoppingList(#shoppingListId).userName.equals(authentication.name)")
     ShoppingList addCocktails(@Nonnull UUID shoppingListId, Set<UUID> cocktailIds);

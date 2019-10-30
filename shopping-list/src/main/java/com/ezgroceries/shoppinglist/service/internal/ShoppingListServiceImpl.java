@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -37,11 +38,14 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     }
 
     @Override
-    public ShoppingList create(@Nonnull ShoppingList shoppingList) {
-        final ShoppingListEntity entity = shoppingListRepository.findByName(shoppingList.getName());
+    public ShoppingList create(@Nonnull String name) {
+        final ShoppingListEntity entity = shoppingListRepository.findByName(name);
         if (entity != null) {
             return createShoppingList(entity);
         }
+        final ShoppingList shoppingList = new ShoppingList(
+                UUID.randomUUID(), name, new HashSet<>()
+        );
         final ShoppingListEntity newEntity = shoppingListRepository.save(createEntity(shoppingList));
         shoppingListRepository.flush();
         return createShoppingList(newEntity);
