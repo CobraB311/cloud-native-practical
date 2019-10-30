@@ -9,6 +9,7 @@ import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.service.external.CocktailExtService;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +78,7 @@ public class CocktailServiceImpl implements CocktailService {
         }).collect(Collectors.toMap(CocktailEntity::getIdDrink, o -> o, (o, o2) -> o));
 
         //Merge drinks and our entities, transform to CocktailResource instances
-        return mergeAndTransform(drinks, allDrinks);
+        return createCocktails(Lists.newArrayList(allDrinks.values()));
     }
 
     private Set<String> getDrinkIds(List<CocktailResource> drinks) {
@@ -108,23 +109,20 @@ public class CocktailServiceImpl implements CocktailService {
         return entity;
     }
 
-    private CocktailResource createCocktail(CocktailEntity entity, CocktailResource drink) {
+    private CocktailResource createCocktail(CocktailEntity entity) {
         return new CocktailResource(
                 entity.getId(),
                 entity.getIdDrink(),
                 entity.getName(),
-                drink.getGlass(),
-                drink.getInstructions(),
-                drink.getImage(),
-                drink.getIngredients()
+                entity.getGlass(),
+                entity.getInstructions(),
+                entity.getImageLink(),
+                entity.getIngredients()
         );
     }
 
-    private List<CocktailResource> mergeAndTransform(List<CocktailResource> drinks, Map<String, CocktailEntity> allEntities) {
-        return drinks.stream().map(d -> createCocktail(
-                allEntities.get(d.getDrinkId()),
-                d
-        )).collect(Collectors.toList());
+    private List<CocktailResource> createCocktails(List<CocktailEntity> allEntities) {
+        return allEntities.stream().map(this::createCocktail).collect(Collectors.toList());
     }
 
 }
