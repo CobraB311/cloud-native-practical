@@ -7,10 +7,12 @@ package com.ezgroceries.shoppinglist.persistence.repositories;
 import com.ezgroceries.shoppinglist.persistence.entities.MealEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface MealRepository extends JpaRepository<MealEntity, UUID> {
 
-
+    List<MealEntity> findByIdMealIn(Set<String> ids);
 
 }
