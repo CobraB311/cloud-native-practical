@@ -16,6 +16,8 @@ public interface MealService {
 
     List<MealResource> searchMeals(@Nonnull String search);
 
+    List<String> searchDistinctIngredients(Set<UUID> mealIds);
+
     List<MealResource> findMeals(Set<UUID> mealIds);
 
     List<MealEntity> createEntities(List<MealResource> meals);

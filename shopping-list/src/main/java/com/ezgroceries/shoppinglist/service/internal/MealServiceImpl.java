@@ -46,6 +46,18 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
+    public List<String> searchDistinctIngredients(Set<UUID> mealIds) {
+        if (mealIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        final List<MealEntity> entities = this.repository.findAllById(mealIds);
+        if (entities.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return entities.stream().flatMap(set -> set.getIngredients().stream()).distinct().collect(Collectors.toList());
+    }
+
+    @Override
     public List<MealResource> findMeals(Set<UUID> mealIds) {
         if (mealIds.isEmpty()) {
             return new ArrayList<>();

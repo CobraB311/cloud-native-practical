@@ -10,7 +10,6 @@ import com.ezgroceries.shoppinglist.persistence.entities.MealEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
-import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ShoppingListServiceImpl implements ShoppingListService {
@@ -97,8 +97,9 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     @Override
     public Set<String> searchDistinctIngredients(@Nonnull UUID shoppingListId) {
         final ShoppingList shoppingList = searchShoppingList(shoppingListId);
-        List<String> cocktailIngredients = this.cocktailService.searchDistinctIngredients(shoppingList.getCocktailIds());
-        return Sets.newHashSet(cocktailIngredients);
+        final List<String> cocktailIngredients = this.cocktailService.searchDistinctIngredients(shoppingList.getCocktailIds());
+        final List<String> mealIngredients = this.mealService.searchDistinctIngredients(shoppingList.getMealIds());
+        return Stream.of(cocktailIngredients, mealIngredients).flatMap(List::stream).collect(Collectors.toSet());
     }
 
     @Override

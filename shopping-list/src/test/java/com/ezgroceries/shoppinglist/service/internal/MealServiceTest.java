@@ -6,6 +6,7 @@ package com.ezgroceries.shoppinglist.service.internal;
 
 import com.ezgroceries.shoppinglist.AbstractTest;
 import com.ezgroceries.shoppinglist.model.MealResource;
+import com.ezgroceries.shoppinglist.persistence.entities.MealEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.MealRepository;
 import com.ezgroceries.shoppinglist.service.external.MealExtService;
 import org.junit.Before;
@@ -15,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -46,6 +48,13 @@ public class MealServiceTest extends AbstractTest {
     public void searchMeals() {
         final List<MealResource> meals = mealService.searchMeals("test");
         checkMeals(meals);
+    }
+
+    @Test
+    public void searchDistinctIngredients() {
+        final List<String> ingredients = this.mealService.searchDistinctIngredients(mockedShoppingListEntity().getMealEntities().stream().map(MealEntity::getId).collect(Collectors.toSet()));
+        assertEquals(mockedMealIngredients().size(), ingredients.size());
+        assertTrue(mockedMealIngredients().containsAll(ingredients));
     }
 
     private void checkMeals(List<MealResource> meals) {

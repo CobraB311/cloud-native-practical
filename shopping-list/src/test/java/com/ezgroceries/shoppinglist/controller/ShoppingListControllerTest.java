@@ -21,9 +21,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anySet;
@@ -59,10 +60,9 @@ public class ShoppingListControllerTest extends AbstractTest {
         when(shoppingListService.addMeals(any(), anySet())).thenReturn(mockedShoppingList());
         when(shoppingListService.searchShoppingList(any())).thenReturn(mockedShoppingList());
 
-        final Set<String> distinctIngredients = new HashSet<>();
-        distinctIngredients.addAll(mockedCocktailIngredients());
-        distinctIngredients.addAll(mockedMealIngredients());
-        when(shoppingListService.searchDistinctIngredients(any())).thenReturn(distinctIngredients);
+        when(shoppingListService.searchDistinctIngredients(any())).thenReturn(
+                Stream.of(mockedCocktailIngredients(), mockedMealIngredients()).flatMap(List::stream).collect(Collectors.toSet())
+        );
 
         when(shoppingListService.searchAllShoppingLists()).thenReturn(Lists.newArrayList(mockedShoppingList(), mockedShoppingList()));
     }
