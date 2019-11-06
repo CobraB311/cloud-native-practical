@@ -5,11 +5,14 @@ package com.ezgroceries.shoppinglist.controller;
 */
 
 import com.ezgroceries.shoppinglist.controller.model.request.CocktailRequest;
+import com.ezgroceries.shoppinglist.controller.model.request.MealRequest;
 import com.ezgroceries.shoppinglist.controller.model.request.ShoppingListRequest;
 import com.ezgroceries.shoppinglist.controller.model.response.CocktailIdResponse;
+import com.ezgroceries.shoppinglist.controller.model.response.MealIdResponse;
 import com.ezgroceries.shoppinglist.controller.model.response.ShoppingListResponse;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.service.internal.CocktailService;
+import com.ezgroceries.shoppinglist.service.internal.MealService;
 import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -40,11 +43,13 @@ public class ShoppingListController {
 
     private final ShoppingListService shoppingListService;
     private final CocktailService cocktailService;
+    private final MealService mealService;
 
     @Autowired
-    public ShoppingListController(ShoppingListService shoppingListService, CocktailService cocktailService) {
+    public ShoppingListController(ShoppingListService shoppingListService, CocktailService cocktailService, MealService mealService) {
         this.shoppingListService = shoppingListService;
         this.cocktailService = cocktailService;
+        this.mealService = mealService;
     }
 
     @ApiOperation(value = "Get all shopping lists")
@@ -79,11 +84,17 @@ public class ShoppingListController {
 
     @ApiOperation(value = "Add cocktails to shopping list by id")
     @PostMapping(value = "/{shoppingListId}/cocktails")
-    public Resources<CocktailIdResponse> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailRequest> cocktails) {
-        return new Resources<>(addCocktailsToShoppingList(id, cocktails));
+    public Resources<CocktailIdResponse> addCocktailsToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailRequest> cocktails) {
+        return new Resources<>(addCocktailIdsToShoppingList(id, cocktails));
     }
 
-    private Set<CocktailIdResponse> addCocktailsToShoppingList(String id, List<CocktailRequest> cocktails) {
+    @ApiOperation(value = "Add meals to shopping list by id")
+    @PostMapping(value = "/{shoppingListId}/meals")
+    public Resources<MealIdResponse> addMealsToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<MealRequest> meals) {
+        return new Resources<>(addMealIdsToShoppingList(id, meals));
+    }
+
+    private Set<CocktailIdResponse> addCocktailIdsToShoppingList(String id, List<CocktailRequest> cocktails) {
         if (Strings.isNullOrEmpty(id) || cocktails.isEmpty()) {
             return new HashSet<>();
         }
@@ -94,6 +105,19 @@ public class ShoppingListController {
 
         // Return only id's
         return shoppingList.getCocktailIds().stream().map(c -> new CocktailIdResponse(c.toString())).collect(Collectors.toSet());
+    }
+
+    private Set<MealIdResponse> addMealIdsToShoppingList(String id, List<MealRequest> meals) {
+        if (Strings.isNullOrEmpty(id) || meals.isEmpty()) {
+            return new HashSet<>();
+        }
+        final ShoppingList shoppingList = this.shoppingListService.addMeals(
+                UUID.fromString(id),
+                meals.stream().map(MealRequest::getMealId).collect(Collectors.toSet())
+        );
+
+        // Return only id's
+        return shoppingList.getMealIds().stream().map(c -> new MealIdResponse(c.toString())).collect(Collectors.toSet());
     }
 
     private ShoppingListResponse createShoppingListResponseWithIngredients(ShoppingList shoppingList) {

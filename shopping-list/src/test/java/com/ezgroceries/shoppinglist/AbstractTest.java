@@ -95,6 +95,9 @@ public abstract class AbstractTest {
                 Stream.of(
                         UUID.fromString("bb3b0178-5bd2-48e6-b0cc-e8d83115083f"),
                         UUID.fromString("dc24c940-fdbf-4de4-9531-dd89df76bb08")
+                ).collect(Collectors.toSet()),
+                Stream.of(
+                        UUID.fromString("45ff387d-4b84-4df9-a76e-9adebd6f9082")
                 ).collect(Collectors.toSet())
         );
     }

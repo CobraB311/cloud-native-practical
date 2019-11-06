@@ -48,7 +48,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
             return createShoppingList(entity);
         }
         final ShoppingList shoppingList = new ShoppingList(
-                UUID.randomUUID(), name, new HashSet<>()
+                UUID.randomUUID(), name, new HashSet<>(), new HashSet<>()
         );
         final ShoppingListEntity newEntity = shoppingListRepository.save(createEntity(shoppingList));
         shoppingListRepository.flush();
@@ -118,7 +118,8 @@ public class ShoppingListServiceImpl implements ShoppingListService {
                 entity.getId(),
                 entity.getName(),
                 entity.getUserId(),
-                entity.getCocktailEntities().stream().map(CocktailEntity::getId).collect(Collectors.toSet())
+                entity.getCocktailEntities().stream().map(CocktailEntity::getId).collect(Collectors.toSet()),
+                entity.getMealEntities().stream().map(MealEntity::getId).collect(Collectors.toSet())
         );
     }
 
