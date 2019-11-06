@@ -9,6 +9,7 @@ import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
+import com.ezgroceries.shoppinglist.persistence.repositories.MealRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
 import org.assertj.core.util.Lists;
@@ -44,6 +45,9 @@ public class ShoppingListServiceTest extends AbstractTest {
     private CocktailRepository cocktailRepository;
 
     @Mock
+    private MealRepository mealRepository;
+
+    @Mock
     private AuthenticationFacade authenticationFacade;
 
     private ShoppingListService shoppingListService;
@@ -52,7 +56,7 @@ public class ShoppingListServiceTest extends AbstractTest {
     public void initialize() {
         MockitoAnnotations.initMocks(this);
 
-        shoppingListService = new ShoppingListServiceImpl(shoppingListRepository, cocktailRepository, authenticationFacade);
+        shoppingListService = new ShoppingListServiceImpl(shoppingListRepository, cocktailRepository, mealRepository, authenticationFacade);
 
         when(authenticationFacade.getUserName()).thenReturn(mockedUser);
 

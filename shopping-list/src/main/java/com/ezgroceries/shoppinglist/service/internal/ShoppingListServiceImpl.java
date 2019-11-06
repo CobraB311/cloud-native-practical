@@ -6,8 +6,10 @@ package com.ezgroceries.shoppinglist.service.internal;
 
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
+import com.ezgroceries.shoppinglist.persistence.entities.MealEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
+import com.ezgroceries.shoppinglist.persistence.repositories.MealRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +30,14 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
     private final ShoppingListRepository shoppingListRepository;
     private final CocktailRepository cocktailRepository;
+    private final MealRepository mealRepository;
     private final AuthenticationFacade authenticationFacade;
 
     @Autowired
-    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailRepository cocktailRepository, AuthenticationFacade authenticationFacade) {
+    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailRepository cocktailRepository, MealRepository mealRepository, AuthenticationFacade authenticationFacade) {
         this.shoppingListRepository = shoppingListRepository;
         this.cocktailRepository = cocktailRepository;
+        this.mealRepository = mealRepository;
         this.authenticationFacade = authenticationFacade;
     }
 
@@ -60,6 +64,22 @@ public class ShoppingListServiceImpl implements ShoppingListService {
             }
             e.setCocktailEntities(
                     findCocktails(cocktails)
+            );
+            final ShoppingListEntity newEntity = this.shoppingListRepository.save(e);
+            this.shoppingListRepository.flush();
+            return createShoppingList(newEntity);
+        }).orElseThrow(() -> new RuntimeException("No shopping list found for: '" + shoppingListId + "'. You first need to create one."));
+    }
+
+    @Override
+    public ShoppingList addMeals(@Nonnull UUID shoppingListId, Set<UUID> meals) {
+        final Optional<ShoppingListEntity> optionalEntity = this.shoppingListRepository.findById(shoppingListId);
+        return optionalEntity.map(e -> {
+            if (meals.isEmpty()) {
+                return createShoppingList(e);
+            }
+            e.setMealEntities(
+                    findMeals(meals)
             );
             final ShoppingListEntity newEntity = this.shoppingListRepository.save(e);
             this.shoppingListRepository.flush();
@@ -107,6 +127,13 @@ public class ShoppingListServiceImpl implements ShoppingListService {
             return new ArrayList<>();
         }
         return this.cocktailRepository.findAllById(cocktailsIds);
+    }
+
+    private List<MealEntity> findMeals(Set<UUID> mealIds) {
+        if (mealIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return this.mealRepository.findAllById(mealIds);
     }
 
 }

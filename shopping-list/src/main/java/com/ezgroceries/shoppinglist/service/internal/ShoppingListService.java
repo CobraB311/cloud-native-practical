@@ -20,6 +20,9 @@ public interface ShoppingListService {
     @PreAuthorize("@shoppingListServiceImpl.searchShoppingList(#shoppingListId).userName.equals(authentication.name)")
     ShoppingList addCocktails(@Nonnull UUID shoppingListId, Set<UUID> cocktailIds);
 
+    @PreAuthorize("@shoppingListServiceImpl.searchShoppingList(#shoppingListId).userName.equals(authentication.name)")
+    ShoppingList addMeals(@Nonnull UUID shoppingListId, Set<UUID> mealIds);
+
     @PostAuthorize("returnObject.userName.equals(authentication.name)")
     ShoppingList searchShoppingList(@Nonnull UUID id);
 
