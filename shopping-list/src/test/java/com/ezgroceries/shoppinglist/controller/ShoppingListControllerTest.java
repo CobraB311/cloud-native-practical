@@ -55,7 +55,7 @@ public class ShoppingListControllerTest extends AbstractTest {
         when(shoppingListService.create(any())).thenReturn(mockedShoppingList());
         when(shoppingListService.addCocktails(any(), anySet())).thenReturn(mockedShoppingList());
         when(shoppingListService.searchShoppingList(any())).thenReturn(mockedShoppingList());
-        when(cocktailService.searchDistinctIngredients(any())).thenReturn(mockedIngredients());
+        when(cocktailService.searchDistinctIngredients(any())).thenReturn(mockedCocktailIngredients());
         when(shoppingListService.searchAllShoppingLists()).thenReturn(Lists.newArrayList(mockedShoppingList(), mockedShoppingList()));
     }
 
