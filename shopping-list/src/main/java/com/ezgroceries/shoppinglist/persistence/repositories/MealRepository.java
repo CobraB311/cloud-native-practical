@@ -15,4 +15,6 @@ public interface MealRepository extends JpaRepository<MealEntity, UUID> {
 
     List<MealEntity> findByIdMealIn(Set<String> ids);
 
+    List<MealEntity> findByNameContainingIgnoreCase(String name);
+
 }

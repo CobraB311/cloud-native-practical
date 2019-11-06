@@ -7,15 +7,11 @@ package com.ezgroceries.shoppinglist.service.external;
 import com.ezgroceries.shoppinglist.model.MealResource;
 import com.ezgroceries.shoppinglist.service.external.client.MealDBClient;
 import com.ezgroceries.shoppinglist.service.external.client.model.MealDBResponse;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -37,27 +33,18 @@ public class MealExtServiceImpl implements MealExtService {
             return new ArrayList<>();
         }
 
-        return response.getMeals().stream().map(m -> {
-
-            final String tags = m.getStrTags();
-            Set<String> tagSet = new HashSet<>();
-            if (!Strings.isNullOrEmpty(tags)) {
-                tagSet.addAll(Lists.newArrayList(tags.split(",")));
-            }
-
-            return new MealResource(
-                    UUID.randomUUID(),
-                    m.getIdMeal(),
-                    m.getStrMeal(),
-                    m.getStrCategory(),
-                    m.getStrArea(),
-                    m.getStrInstructions(),
-                    m.getStrMealThumb(),
-                    m.getStrYoutube(),
-                    tagSet,
-                    m.getIngredients()
-            );
-        }).collect(Collectors.toList());
+        return response.getMeals().stream().map(m -> new MealResource(
+                UUID.randomUUID(),
+                m.getIdMeal(),
+                m.getStrMeal(),
+                m.getStrCategory(),
+                m.getStrArea(),
+                m.getStrInstructions(),
+                m.getStrMealThumb(),
+                m.getStrYoutube(),
+                m.getTags(),
+                m.getIngredients()
+        )).collect(Collectors.toList());
     }
 
 }

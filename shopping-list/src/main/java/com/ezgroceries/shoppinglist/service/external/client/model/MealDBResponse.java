@@ -6,7 +6,9 @@ package com.ezgroceries.shoppinglist.service.external.client.model;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -458,6 +460,20 @@ public class MealDBResponse {
 
         public void setStrMeasure20(String strMeasure20) {
             this.strMeasure20 = strMeasure20;
+        }
+
+        public Set<String> getTags() {
+            Set<String> tagSet = new HashSet<>();
+            if (!Strings.isNullOrEmpty(this.getStrTags())) {
+                tagSet.addAll(Lists.newArrayList(this.getStrTags().split(",")));
+            }
+            return tagSet;
+        }
+
+        public void setTags(Set<String> tags) {
+            if (!tags.isEmpty()) {
+                this.setStrTags(String.join(",", tags));
+            }
         }
 
         @Override
