@@ -23,12 +23,18 @@ import java.util.stream.Stream;
 @ActiveProfiles(value = "hsqldb")
 public abstract class AbstractTest {
 
+    private static final String COCKTAIL_ID_1 = "23b3d85a-3928-41c0-a533-6538a71e17c4";
+    private static final String COCKTAIL_ID_2 = "d615ec78-fe93-467b-8d26-5d26d8eab073";
+    private static final String MEAL_ID_1 = "044c881a-b2e3-4851-982f-6d7acce3dfb8";
+    protected static final String SHOPPING_LIST_WITH_COCKTAILS = "a494829e-b008-4d2f-b7d6-e185135a8e37";
+    protected static final String SHOPPING_LIST_NO_COCKTAILS = "ca582a63-bf0e-47a8-a8d6-4aea840a04b0";
+
     protected String mockedUser = "Test user";
 
     protected List<CocktailResource> mockedCocktails() {
         return Lists.newArrayList(
                 new CocktailResource(
-                        UUID.fromString("23b3d85a-3928-41c0-a533-6538a71e17c4"),
+                        UUID.fromString(COCKTAIL_ID_1),
                         "606",
                         "Margerita",
                         "Cocktail glass",
@@ -36,7 +42,7 @@ public abstract class AbstractTest {
                         "https://www.thecocktaildb.com/images/media/drink/wpxpvu1439905379.jpg",
                         new HashSet<>(mockedCocktailIngredients())),
                 new CocktailResource(
-                        UUID.fromString("d615ec78-fe93-467b-8d26-5d26d8eab073"),
+                        UUID.fromString(COCKTAIL_ID_2),
                         "607",
                         "Blue Margerita",
                         "Cocktail glass",
@@ -48,7 +54,7 @@ public abstract class AbstractTest {
     protected List<MealResource> mockedMeals() {
         return Lists.newArrayList(
                 new MealResource(
-                        UUID.fromString("044c881a-b2e3-4851-982f-6d7acce3dfb8"),
+                        UUID.fromString(MEAL_ID_1),
                         "707",
                         "Lasagne",
                         "Italian",
@@ -90,27 +96,27 @@ public abstract class AbstractTest {
 
     protected ShoppingList mockedShoppingList() {
         return new ShoppingList(
-                UUID.fromString("a494829e-b008-4d2f-b7d6-e185135a8e37"),
+                UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS),
                 "I'm a mocked shopping list",
                 Stream.of(
-                        UUID.fromString("bb3b0178-5bd2-48e6-b0cc-e8d83115083f"),
-                        UUID.fromString("dc24c940-fdbf-4de4-9531-dd89df76bb08")
+                        UUID.fromString(COCKTAIL_ID_1),
+                        UUID.fromString(COCKTAIL_ID_2)
                 ).collect(Collectors.toSet()),
                 Stream.of(
-                        UUID.fromString("45ff387d-4b84-4df9-a76e-9adebd6f9082")
+                        UUID.fromString(MEAL_ID_1)
                 ).collect(Collectors.toSet())
         );
     }
 
     protected ShoppingListEntity mockedShoppingListEntity() {
         final ShoppingListEntity entity = new ShoppingListEntity();
-        entity.setId(UUID.fromString("94511c9b-6ee9-491c-acc3-07e45142ca2f"));
+        entity.setId(UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS));
         entity.setName("A - Mocked shopping list entity");
         entity.setCocktailEntities(Lists.newArrayList(
-                mockedCocktailEntity("bb3b0178-5bd2-48e6-b0cc-e8d83115083f"),
-                mockedCocktailEntity("dc24c940-fdbf-4de4-9531-dd89df76bb08")));
+                mockedCocktailEntity(COCKTAIL_ID_1),
+                mockedCocktailEntity(COCKTAIL_ID_2)));
         entity.setMealEntities(Lists.newArrayList(
-                mockedMealEntity("a98dfc4b-627b-411b-b503-321868b26431")
+                mockedMealEntity(MEAL_ID_1)
         ));
         entity.setUserId(mockedUser);
         return entity;
@@ -118,7 +124,7 @@ public abstract class AbstractTest {
 
     protected ShoppingListEntity mockedShoppingListEntityNoCocktails() {
         final ShoppingListEntity entity = new ShoppingListEntity();
-        entity.setId(UUID.fromString("ca582a63-bf0e-47a8-a8d6-4aea840a04b0"));
+        entity.setId(UUID.fromString(SHOPPING_LIST_NO_COCKTAILS));
         entity.setName("B - Mocked shopping list entity no cocktails");
         entity.setCocktailEntities(new ArrayList<>());
         entity.setUserId(mockedUser);

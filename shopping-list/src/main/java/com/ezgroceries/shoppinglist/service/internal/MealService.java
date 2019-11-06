@@ -5,12 +5,19 @@ package com.ezgroceries.shoppinglist.service.internal;
 */
 
 import com.ezgroceries.shoppinglist.model.MealResource;
+import com.ezgroceries.shoppinglist.persistence.entities.MealEntity;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public interface MealService {
 
     List<MealResource> searchMeals(@Nonnull String search);
+
+    List<MealResource> findMeals(Set<UUID> mealIds);
+
+    List<MealEntity> createEntities(List<MealResource> meals);
 
 }

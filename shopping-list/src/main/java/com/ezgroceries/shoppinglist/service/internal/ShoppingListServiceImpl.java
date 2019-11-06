@@ -8,8 +8,6 @@ import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.MealEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
-import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
-import com.ezgroceries.shoppinglist.persistence.repositories.MealRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +27,15 @@ import java.util.stream.Collectors;
 public class ShoppingListServiceImpl implements ShoppingListService {
 
     private final ShoppingListRepository shoppingListRepository;
-    private final CocktailRepository cocktailRepository;
-    private final MealRepository mealRepository;
+    private final CocktailService cocktailService;
+    private final MealService mealService;
     private final AuthenticationFacade authenticationFacade;
 
     @Autowired
-    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailRepository cocktailRepository, MealRepository mealRepository, AuthenticationFacade authenticationFacade) {
+    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailService cocktailService, MealService mealService, AuthenticationFacade authenticationFacade) {
         this.shoppingListRepository = shoppingListRepository;
-        this.cocktailRepository = cocktailRepository;
-        this.mealRepository = mealRepository;
+        this.cocktailService = cocktailService;
+        this.mealService = mealService;
         this.authenticationFacade = authenticationFacade;
     }
 
@@ -63,7 +61,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
                 return createShoppingList(e);
             }
             e.setCocktailEntities(
-                    findCocktails(cocktails)
+                    cocktailService.createEntities(cocktailService.findCocktails(cocktails))
             );
             final ShoppingListEntity newEntity = this.shoppingListRepository.save(e);
             this.shoppingListRepository.flush();
@@ -79,7 +77,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
                 return createShoppingList(e);
             }
             e.setMealEntities(
-                    findMeals(meals)
+                    mealService.createEntities(mealService.findMeals(meals))
             );
             final ShoppingListEntity newEntity = this.shoppingListRepository.save(e);
             this.shoppingListRepository.flush();
@@ -121,20 +119,6 @@ public class ShoppingListServiceImpl implements ShoppingListService {
                 entity.getCocktailEntities().stream().map(CocktailEntity::getId).collect(Collectors.toSet()),
                 entity.getMealEntities().stream().map(MealEntity::getId).collect(Collectors.toSet())
         );
-    }
-
-    private List<CocktailEntity> findCocktails(Set<UUID> cocktailsIds) {
-        if (cocktailsIds.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return this.cocktailRepository.findAllById(cocktailsIds);
-    }
-
-    private List<MealEntity> findMeals(Set<UUID> mealIds) {
-        if (mealIds.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return this.mealRepository.findAllById(mealIds);
     }
 
 }

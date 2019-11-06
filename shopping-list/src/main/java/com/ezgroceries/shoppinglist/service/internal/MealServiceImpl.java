@@ -45,6 +45,24 @@ public class MealServiceImpl implements MealService {
         return mergeMeals(mealResources);
     }
 
+    @Override
+    public List<MealResource> findMeals(Set<UUID> mealIds) {
+        if (mealIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return createMeals(this.repository.findAllById(mealIds));
+    }
+
+    // Need to expose a create cocktail entity method for shopping list service.
+    // We don't won't to expose the real entities and don't wont to use repositories in another service
+    @Override
+    public List<MealEntity> createEntities(List<MealResource> meals) {
+        if (meals.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return meals.stream().map(this::createEntity).collect(Collectors.toList());
+    }
+
     private List<MealResource> mergeMeals(List<MealResource> meals) {
 
         if (meals.isEmpty()) {
@@ -111,6 +129,10 @@ public class MealServiceImpl implements MealService {
                 entity.getTags(),
                 entity.getIngredients()
         );
+    }
+
+    private List<MealResource> createMeals(List<MealEntity> allEntities) {
+        return allEntities.stream().map(this::createMeal).collect(Collectors.toList());
     }
 
 }

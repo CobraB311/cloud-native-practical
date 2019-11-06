@@ -56,6 +56,24 @@ public class CocktailServiceImpl implements CocktailService {
         return entities.stream().flatMap(set -> set.getIngredients().stream()).distinct().collect(Collectors.toList());
     }
 
+    @Override
+    public List<CocktailResource> findCocktails(Set<UUID> cocktailsIds) {
+        if (cocktailsIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return createCocktails(this.repository.findAllById(cocktailsIds));
+    }
+
+    // Need to expose a create cocktail entity method for shopping list service.
+    // We don't won't to expose the real entities and don't wont to use repositories in another service
+    @Override
+    public List<CocktailEntity> createEntities(List<CocktailResource> cocktails) {
+        if (cocktails.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return cocktails.stream().map(this::createEntity).collect(Collectors.toList());
+    }
+
     private List<CocktailResource> mergeCocktails(List<CocktailResource> drinks) {
 
         if (drinks.isEmpty()) {
