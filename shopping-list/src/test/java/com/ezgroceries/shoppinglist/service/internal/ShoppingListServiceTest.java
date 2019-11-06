@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -67,6 +68,9 @@ public class ShoppingListServiceTest extends AbstractTest {
         List<ShoppingListEntity> shoppingListEntities = Lists.newArrayList(mockedShoppingListEntityNoCocktails(), mockedShoppingListEntity());
         shoppingListEntities.sort(Comparator.comparing(ShoppingListEntity::getName));
         when(shoppingListRepository.findAll(Sort.by(Sort.Order.asc("name")))).thenReturn(shoppingListEntities);
+
+        when(cocktailService.searchDistinctIngredients(anySet())).thenReturn(mockedCocktailIngredients());
+        when(mealService.searchDistinctIngredients(anySet())).thenReturn(mockedMealIngredients());
     }
 
     @Test
@@ -109,6 +113,12 @@ public class ShoppingListServiceTest extends AbstractTest {
         // Should always be sorted asc on name
         checkShoppingListEntity(shoppingLists.get(0));
         checkShoppingListEntityEmptyCocktails(shoppingLists.get(1));
+    }
+
+    @Test
+    public void getDistinctIngredients() {
+        final Set<String> ingredients = this.shoppingListService.searchDistinctIngredients(UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS));
+        assertEquals(7, ingredients.size());
     }
 
     private void checkShoppingListEntity(ShoppingList shoppingList) {

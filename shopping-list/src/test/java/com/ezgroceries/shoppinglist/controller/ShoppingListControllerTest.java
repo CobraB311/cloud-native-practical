@@ -93,8 +93,7 @@ public class ShoppingListControllerTest extends AbstractTest {
                         "          \"Salt\",\n" +
                         "          \"Blue Curacao\",\n" +
                         "          \"Mozzarella\",\n" +
-                        "          \"Tomatoes\",\n" +
-                        "          \"Bacon\"\n" +
+                        "          \"Tomatoes\"\n" +
                         "        ]\n" +
                         "      },\n" +
                         "      {\n" +
@@ -107,8 +106,7 @@ public class ShoppingListControllerTest extends AbstractTest {
                         "          \"Salt\",\n" +
                         "          \"Blue Curacao\",\n" +
                         "          \"Mozzarella\",\n" +
-                        "          \"Tomatoes\",\n" +
-                        "          \"Bacon\"\n" +
+                        "          \"Tomatoes\"\n" +
                         "        ]\n" +
                         "      }\n" +
                         "    ]\n" +
@@ -138,8 +136,7 @@ public class ShoppingListControllerTest extends AbstractTest {
                         "          \"Salt\",\n" +
                         "          \"Blue Curacao\",\n" +
                         "          \"Mozzarella\",\n" +
-                        "          \"Tomatoes\",\n" +
-                        "          \"Bacon\"\n" +
+                        "          \"Tomatoes\"\n" +
                         "        ]\n" +
                         "}"))
         ;

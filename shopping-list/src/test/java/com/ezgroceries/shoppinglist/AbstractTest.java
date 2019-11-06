@@ -82,7 +82,7 @@ public abstract class AbstractTest {
         List<String> ingredients = new ArrayList<>(3);
         ingredients.add("Mozzarella");
         ingredients.add("Tomatoes");
-        ingredients.add("Bacon");
+        ingredients.add("Salt");
         return ingredients.stream().sorted().collect(Collectors.toList());
     }
 
