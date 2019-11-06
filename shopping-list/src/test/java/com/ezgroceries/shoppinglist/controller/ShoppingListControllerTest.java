@@ -21,6 +21,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -56,7 +58,12 @@ public class ShoppingListControllerTest extends AbstractTest {
         when(shoppingListService.addCocktails(any(), anySet())).thenReturn(mockedShoppingList());
         when(shoppingListService.addMeals(any(), anySet())).thenReturn(mockedShoppingList());
         when(shoppingListService.searchShoppingList(any())).thenReturn(mockedShoppingList());
-        when(cocktailService.searchDistinctIngredients(any())).thenReturn(mockedCocktailIngredients());
+
+        final Set<String> distinctIngredients = new HashSet<>();
+        distinctIngredients.addAll(mockedCocktailIngredients());
+        distinctIngredients.addAll(mockedMealIngredients());
+        when(shoppingListService.searchDistinctIngredients(any())).thenReturn(distinctIngredients);
+
         when(shoppingListService.searchAllShoppingLists()).thenReturn(Lists.newArrayList(mockedShoppingList(), mockedShoppingList()));
     }
 
@@ -84,7 +91,10 @@ public class ShoppingListControllerTest extends AbstractTest {
                         "          \"Triple sec\",\n" +
                         "          \"Lime juice\",\n" +
                         "          \"Salt\",\n" +
-                        "          \"Blue Curacao\"\n" +
+                        "          \"Blue Curacao\",\n" +
+                        "          \"Mozzarella\",\n" +
+                        "          \"Tomatoes\",\n" +
+                        "          \"Bacon\"\n" +
                         "        ]\n" +
                         "      },\n" +
                         "      {\n" +
@@ -95,7 +105,10 @@ public class ShoppingListControllerTest extends AbstractTest {
                         "          \"Triple sec\",\n" +
                         "          \"Lime juice\",\n" +
                         "          \"Salt\",\n" +
-                        "          \"Blue Curacao\"\n" +
+                        "          \"Blue Curacao\",\n" +
+                        "          \"Mozzarella\",\n" +
+                        "          \"Tomatoes\",\n" +
+                        "          \"Bacon\"\n" +
                         "        ]\n" +
                         "      }\n" +
                         "    ]\n" +
@@ -123,7 +136,10 @@ public class ShoppingListControllerTest extends AbstractTest {
                         "          \"Triple sec\",\n" +
                         "          \"Lime juice\",\n" +
                         "          \"Salt\",\n" +
-                        "          \"Blue Curacao\"\n" +
+                        "          \"Blue Curacao\",\n" +
+                        "          \"Mozzarella\",\n" +
+                        "          \"Tomatoes\",\n" +
+                        "          \"Bacon\"\n" +
                         "        ]\n" +
                         "}"))
         ;

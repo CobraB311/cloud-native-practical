@@ -10,6 +10,7 @@ import com.ezgroceries.shoppinglist.persistence.entities.MealEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -87,9 +88,17 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
     @Override
     public ShoppingList searchShoppingList(@Nonnull UUID id) {
+        // TODO: Add shopping lists in ehcache
         final ShoppingListEntity entity = this.shoppingListRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Could not find shopping list with id: '" + id + "'."));
         return createShoppingList(entity);
+    }
+
+    @Override
+    public Set<String> searchDistinctIngredients(@Nonnull UUID shoppingListId) {
+        final ShoppingList shoppingList = searchShoppingList(shoppingListId);
+        List<String> cocktailIngredients = this.cocktailService.searchDistinctIngredients(shoppingList.getCocktailIds());
+        return Sets.newHashSet(cocktailIngredients);
     }
 
     @Override

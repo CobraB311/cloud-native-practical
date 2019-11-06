@@ -75,7 +75,7 @@ public abstract class AbstractTest {
         ingredients.add("Lime juice");
         ingredients.add("Salt");
         ingredients.add("Blue Curacao");
-        return ingredients;
+        return ingredients.stream().sorted().collect(Collectors.toList());
     }
 
     protected List<String> mockedMealIngredients() {
@@ -83,7 +83,7 @@ public abstract class AbstractTest {
         ingredients.add("Mozzarella");
         ingredients.add("Tomatoes");
         ingredients.add("Bacon");
-        return ingredients;
+        return ingredients.stream().sorted().collect(Collectors.toList());
     }
 
     protected List<String> mockedMealTags() {
@@ -98,6 +98,7 @@ public abstract class AbstractTest {
         return new ShoppingList(
                 UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS),
                 "I'm a mocked shopping list",
+                mockedUser,
                 Stream.of(
                         UUID.fromString(COCKTAIL_ID_1),
                         UUID.fromString(COCKTAIL_ID_2)

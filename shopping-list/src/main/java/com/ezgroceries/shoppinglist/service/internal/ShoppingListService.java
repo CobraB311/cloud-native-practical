@@ -26,6 +26,9 @@ public interface ShoppingListService {
     @PostAuthorize("returnObject.userName.equals(authentication.name)")
     ShoppingList searchShoppingList(@Nonnull UUID id);
 
+    @PreAuthorize("@shoppingListServiceImpl.searchShoppingList(#shoppingListId).userName.equals(authentication.name)")
+    Set<String> searchDistinctIngredients(@Nonnull UUID shoppingListId);
+
     List<ShoppingList> searchAllShoppingLists();
 
 }
