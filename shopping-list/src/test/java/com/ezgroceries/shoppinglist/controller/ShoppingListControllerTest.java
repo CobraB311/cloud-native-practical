@@ -54,6 +54,7 @@ public class ShoppingListControllerTest extends AbstractTest {
         when(cocktailService.searchCocktails(anyString())).thenReturn(mockedCocktails());
         when(shoppingListService.create(any())).thenReturn(mockedShoppingList());
         when(shoppingListService.addCocktails(any(), anySet())).thenReturn(mockedShoppingList());
+        when(shoppingListService.addMeals(any(), anySet())).thenReturn(mockedShoppingList());
         when(shoppingListService.searchShoppingList(any())).thenReturn(mockedShoppingList());
         when(cocktailService.searchDistinctIngredients(any())).thenReturn(mockedCocktailIngredients());
         when(shoppingListService.searchAllShoppingLists()).thenReturn(Lists.newArrayList(mockedShoppingList(), mockedShoppingList()));
@@ -150,7 +151,7 @@ public class ShoppingListControllerTest extends AbstractTest {
 
     @Test
     @WithMockUser
-    public void testAddToShoppingList() throws Exception {
+    public void testAddCocktailsToShoppingList() throws Exception {
         this.mockMvc.perform(
                 post(rootMapping + "/" + UUID.randomUUID().toString() + "/cocktails")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -167,6 +168,29 @@ public class ShoppingListControllerTest extends AbstractTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$._embedded.cocktailIdResponseList",
                         jsonPath("cocktailId").exists()
+                ).isArray())
+        ;
+    }
+
+    @Test
+    @WithMockUser
+    public void testAddMealsToShoppingList() throws Exception {
+        this.mockMvc.perform(
+                post(rootMapping + "/" + UUID.randomUUID().toString() + "/meals")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("[\n" +
+                                "  {\n" +
+                                "    \"mealId\": \"23b3d85a-3928-41c0-a533-6538a71e17c4\"\n" +
+                                "  },\n" +
+                                "  {\n" +
+                                "    \"mealId\": \"d615ec78-fe93-467b-8d26-5d26d8eab073\"\n" +
+                                "  }\n" +
+                                "]")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$._embedded.mealIdResponseList",
+                        jsonPath("mealId").value("45ff387d-4b84-4df9-a76e-9adebd6f9082")
                 ).isArray())
         ;
     }
