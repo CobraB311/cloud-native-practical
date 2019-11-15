@@ -9,6 +9,7 @@ import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
 import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
+import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,13 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
     private final ShoppingListRepository shoppingListRepository;
     private final CocktailRepository cocktailRepository;
+    private final AuthenticationFacade authenticationFacade;
 
     @Autowired
-    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailRepository cocktailRepository) {
+    public ShoppingListServiceImpl(ShoppingListRepository shoppingListRepository, CocktailRepository cocktailRepository, AuthenticationFacade authenticationFacade) {
         this.shoppingListRepository = shoppingListRepository;
         this.cocktailRepository = cocktailRepository;
+        this.authenticationFacade = authenticationFacade;
     }
 
     @Override
@@ -73,13 +76,16 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         if (entities.isEmpty()) {
             return new ArrayList<>();
         }
-        return entities.stream().map(this::createShoppingList).collect(Collectors.toList());
+        // Make sure only the shopping lists of the user are returned
+        return entities.stream().filter(e -> authenticationFacade.getUserName().equals(e.getUserId()))
+                .map(this::createShoppingList).collect(Collectors.toList());
     }
 
     private ShoppingListEntity createEntity(ShoppingList shoppingList) {
         ShoppingListEntity entity = new ShoppingListEntity();
         entity.setId(shoppingList.getShoppingListId());
         entity.setName(shoppingList.getName());
+        entity.setUserId(authenticationFacade.getUserName());
         return entity;
     }
 
@@ -87,6 +93,7 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         return new ShoppingList(
                 entity.getId(),
                 entity.getName(),
+                entity.getUserId(),
                 entity.getCocktailEntities().stream().map(CocktailEntity::getId).collect(Collectors.toSet())
         );
     }

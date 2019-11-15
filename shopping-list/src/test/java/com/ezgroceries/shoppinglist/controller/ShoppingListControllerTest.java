@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -59,6 +60,7 @@ public class ShoppingListControllerTest extends AbstractTest {
     }
 
     @Test
+    @WithMockUser
     public void testGetAllShoppingList() throws Exception {
         this.mockMvc.perform(
                 get(rootMapping)
@@ -102,6 +104,7 @@ public class ShoppingListControllerTest extends AbstractTest {
     }
 
     @Test
+    @WithMockUser
     public void testGetShoppingList() throws Exception {
         this.mockMvc.perform(
                 get(rootMapping + "/" + UUID.randomUUID().toString())
@@ -126,6 +129,7 @@ public class ShoppingListControllerTest extends AbstractTest {
     }
 
     @Test
+    @WithMockUser
     public void testNewShoppingList() throws Exception {
         this.mockMvc.perform(
                 post(rootMapping)
@@ -145,6 +149,7 @@ public class ShoppingListControllerTest extends AbstractTest {
     }
 
     @Test
+    @WithMockUser
     public void testAddToShoppingList() throws Exception {
         this.mockMvc.perform(
                 post(rootMapping + "/" + UUID.randomUUID().toString() + "/cocktails")
