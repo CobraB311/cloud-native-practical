@@ -8,25 +8,25 @@ import com.google.common.base.MoreObjects;
 
 import java.util.Objects;
 
-public class CocktailIdResponse {
+public class MealIdResponse {
 
-    private String cocktailId;
+    private String mealId;
 
-    public CocktailIdResponse(String cocktailId) {
-        this.cocktailId = cocktailId;
+    public MealIdResponse(String mealId) {
+        this.mealId = mealId;
     }
 
-    public String getCocktailId() {
-        return cocktailId;
+    public String getMealId() {
+        return mealId;
     }
 
-    public void setCocktailId(String cocktailId) {
-        this.cocktailId = cocktailId;
+    public void setMealId(String mealId) {
+        this.mealId = mealId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cocktailId);
+        return Objects.hash(mealId);
     }
 
     @Override
@@ -37,14 +37,14 @@ public class CocktailIdResponse {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final CocktailIdResponse other = (CocktailIdResponse) obj;
-        return Objects.equals(this.cocktailId, other.cocktailId);
+        final MealIdResponse other = (MealIdResponse) obj;
+        return Objects.equals(this.mealId, other.mealId);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("cocktailId", cocktailId)
+                .add("mealId", mealId)
                 .toString();
     }
 

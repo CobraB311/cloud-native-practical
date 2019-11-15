@@ -16,18 +16,21 @@ public class ShoppingList {
     private String name;
     private String userName;
     private Set<UUID> cocktailIds;
+    private Set<UUID> mealIds;
 
-    public ShoppingList(UUID shoppingListId, String name, Set<UUID> cocktailIds) {
+    public ShoppingList(UUID shoppingListId, String name, Set<UUID> cocktailIds, Set<UUID> mealIds) {
         this.shoppingListId = shoppingListId;
         this.name = name;
         this.cocktailIds = cocktailIds;
+        this.mealIds = mealIds;
     }
 
-    public ShoppingList(UUID shoppingListId, String name, String userName, Set<UUID> cocktailIds) {
+    public ShoppingList(UUID shoppingListId, String name, String userName, Set<UUID> cocktailIds, Set<UUID> mealIds) {
         this.shoppingListId = shoppingListId;
         this.name = name;
         this.userName = userName;
         this.cocktailIds = cocktailIds;
+        this.mealIds = mealIds;
     }
 
     public UUID getShoppingListId() {
@@ -62,9 +65,17 @@ public class ShoppingList {
         this.cocktailIds = cocktailIds;
     }
 
+    public Set<UUID> getMealIds() {
+        return mealIds;
+    }
+
+    public void setMealIds(Set<UUID> mealIds) {
+        this.mealIds = mealIds;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(shoppingListId, name, userName, cocktailIds);
+        return Objects.hash(shoppingListId, name, userName, cocktailIds, mealIds);
     }
 
     @Override
@@ -79,7 +90,8 @@ public class ShoppingList {
         return Objects.equals(this.shoppingListId, other.shoppingListId)
                 && Objects.equals(this.name, other.name)
                 && Objects.equals(this.userName, other.userName)
-                && Objects.equals(this.cocktailIds, other.cocktailIds);
+                && Objects.equals(this.cocktailIds, other.cocktailIds)
+                && Objects.equals(this.mealIds, other.mealIds);
     }
 
     @Override
@@ -87,7 +99,9 @@ public class ShoppingList {
         return MoreObjects.toStringHelper(this)
                 .add("shoppingListId", shoppingListId)
                 .add("name", name)
+                .add("userName", userName)
                 .add("cocktailIds", cocktailIds)
+                .add("mealIds", mealIds)
                 .toString();
     }
 

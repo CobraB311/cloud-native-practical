@@ -5,11 +5,12 @@ package com.ezgroceries.shoppinglist.controller;
 */
 
 import com.ezgroceries.shoppinglist.controller.model.request.CocktailRequest;
+import com.ezgroceries.shoppinglist.controller.model.request.MealRequest;
 import com.ezgroceries.shoppinglist.controller.model.request.ShoppingListRequest;
 import com.ezgroceries.shoppinglist.controller.model.response.CocktailIdResponse;
+import com.ezgroceries.shoppinglist.controller.model.response.MealIdResponse;
 import com.ezgroceries.shoppinglist.controller.model.response.ShoppingListResponse;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
-import com.ezgroceries.shoppinglist.service.internal.CocktailService;
 import com.ezgroceries.shoppinglist.service.internal.ShoppingListService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,19 +41,24 @@ import java.util.stream.Collectors;
 public class ShoppingListController {
 
     private final ShoppingListService shoppingListService;
-    private final CocktailService cocktailService;
 
     @Autowired
-    public ShoppingListController(ShoppingListService shoppingListService, CocktailService cocktailService) {
+    public ShoppingListController(ShoppingListService shoppingListService) {
         this.shoppingListService = shoppingListService;
-        this.cocktailService = cocktailService;
     }
 
     @ApiOperation(value = "Get all shopping lists")
     @GetMapping
     public Resources<ShoppingListResponse> getAllShoppingList() {
         List<ShoppingList> shoppingLists = this.shoppingListService.searchAllShoppingLists();
-        List<ShoppingListResponse> responses = shoppingLists.stream().map(this::createShoppingListResponseWithIngredients).collect(Collectors.toList());
+        List<ShoppingListResponse> responses = shoppingLists.stream().map(s -> {
+            final Set<String> ingredients = this.shoppingListService.searchDistinctIngredients(s.getShoppingListId());
+            return new ShoppingListResponse(
+                    s.getShoppingListId().toString(),
+                    s.getName(),
+                    new ArrayList<>(ingredients)
+            );
+        }).collect(Collectors.toList());
         return new Resources<>(responses);
     }
 
@@ -59,9 +66,14 @@ public class ShoppingListController {
     @GetMapping(value = "/{shoppingListId}")
     public Resource<ShoppingListResponse> getShoppingList(@PathVariable("shoppingListId") String id) {
         ShoppingList shoppingList = this.shoppingListService.searchShoppingList(UUID.fromString(id));
-        ShoppingListResponse response = createShoppingListResponseWithIngredients(shoppingList);
-        return new Resource<>(response);
-
+        final Set<String> ingredients = this.shoppingListService.searchDistinctIngredients(UUID.fromString(id));
+        return new Resource<>(
+                new ShoppingListResponse(
+                        shoppingList.getShoppingListId().toString(),
+                        shoppingList.getName(),
+                        new ArrayList<>(ingredients)
+                )
+        );
     }
 
     @ApiOperation(value = "Create new shopping list")
@@ -79,11 +91,17 @@ public class ShoppingListController {
 
     @ApiOperation(value = "Add cocktails to shopping list by id")
     @PostMapping(value = "/{shoppingListId}/cocktails")
-    public Resources<CocktailIdResponse> addToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailRequest> cocktails) {
-        return new Resources<>(addCocktailsToShoppingList(id, cocktails));
+    public Resources<CocktailIdResponse> addCocktailsToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<CocktailRequest> cocktails) {
+        return new Resources<>(addCocktailIdsToShoppingList(id, cocktails));
     }
 
-    private Set<CocktailIdResponse> addCocktailsToShoppingList(String id, List<CocktailRequest> cocktails) {
+    @ApiOperation(value = "Add meals to shopping list by id")
+    @PostMapping(value = "/{shoppingListId}/meals")
+    public Resources<MealIdResponse> addMealsToShoppingList(@PathVariable("shoppingListId") String id, @RequestBody List<MealRequest> meals) {
+        return new Resources<>(addMealIdsToShoppingList(id, meals));
+    }
+
+    private Set<CocktailIdResponse> addCocktailIdsToShoppingList(String id, List<CocktailRequest> cocktails) {
         if (Strings.isNullOrEmpty(id) || cocktails.isEmpty()) {
             return new HashSet<>();
         }
@@ -96,13 +114,17 @@ public class ShoppingListController {
         return shoppingList.getCocktailIds().stream().map(c -> new CocktailIdResponse(c.toString())).collect(Collectors.toSet());
     }
 
-    private ShoppingListResponse createShoppingListResponseWithIngredients(ShoppingList shoppingList) {
-        List<String> ingredients = this.cocktailService.searchDistinctIngredients(shoppingList.getCocktailIds());
-        return new ShoppingListResponse(
-                shoppingList.getShoppingListId().toString(),
-                shoppingList.getName(),
-                ingredients
+    private Set<MealIdResponse> addMealIdsToShoppingList(String id, List<MealRequest> meals) {
+        if (Strings.isNullOrEmpty(id) || meals.isEmpty()) {
+            return new HashSet<>();
+        }
+        final ShoppingList shoppingList = this.shoppingListService.addMeals(
+                UUID.fromString(id),
+                meals.stream().map(MealRequest::getMealId).collect(Collectors.toSet())
         );
+
+        // Return only id's
+        return shoppingList.getMealIds().stream().map(c -> new MealIdResponse(c.toString())).collect(Collectors.toSet());
     }
 
 }

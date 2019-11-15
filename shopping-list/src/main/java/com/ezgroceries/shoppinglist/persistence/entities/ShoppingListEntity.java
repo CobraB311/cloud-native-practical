@@ -40,6 +40,14 @@ public class ShoppingListEntity {
     )
     private List<CocktailEntity> cocktailEntities = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "MEAL_SHOPPING_LIST",
+            joinColumns = @JoinColumn(name = "SHOPPING_LIST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "MEAL_ID")
+    )
+    private List<MealEntity> mealEntities = new ArrayList<>();
+
     public UUID getId() {
         return id;
     }
@@ -72,9 +80,17 @@ public class ShoppingListEntity {
         this.cocktailEntities = cocktailEntities;
     }
 
+    public List<MealEntity> getMealEntities() {
+        return mealEntities;
+    }
+
+    public void setMealEntities(List<MealEntity> mealEntities) {
+        this.mealEntities = mealEntities;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, userId, cocktailEntities);
+        return Objects.hash(id, name, userId, cocktailEntities, mealEntities);
     }
 
     @Override
@@ -89,7 +105,8 @@ public class ShoppingListEntity {
         return Objects.equals(this.id, other.id)
                 && Objects.equals(this.name, other.name)
                 && Objects.equals(this.userId, other.userId)
-                && Objects.equals(this.cocktailEntities, other.cocktailEntities);
+                && Objects.equals(this.cocktailEntities, other.cocktailEntities)
+                && Objects.equals(this.mealEntities, other.mealEntities);
     }
 
     @Override
@@ -99,6 +116,7 @@ public class ShoppingListEntity {
                 .add("name", name)
                 .add("userId", userId)
                 .add("cocktailEntities", cocktailEntities)
+                .add("mealEntities", mealEntities)
                 .toString();
     }
 

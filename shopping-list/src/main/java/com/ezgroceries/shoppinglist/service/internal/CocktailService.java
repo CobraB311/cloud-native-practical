@@ -5,6 +5,7 @@ package com.ezgroceries.shoppinglist.service.internal;
 */
 
 import com.ezgroceries.shoppinglist.model.CocktailResource;
+import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -16,5 +17,9 @@ public interface CocktailService {
     List<CocktailResource> searchCocktails(@Nonnull String search);
 
     List<String> searchDistinctIngredients(Set<UUID> cocktailIds);
+
+    List<CocktailResource> findCocktails(Set<UUID> cocktailsIds);
+
+    List<CocktailEntity> createEntities(List<CocktailResource> cocktails);
 
 }

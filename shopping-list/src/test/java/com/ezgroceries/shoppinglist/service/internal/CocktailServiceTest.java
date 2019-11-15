@@ -39,7 +39,7 @@ public class CocktailServiceTest extends AbstractTest {
     public void initialize() {
         MockitoAnnotations.initMocks(this);
 
-        cocktailService = new CocktailServiceImpl(cocktailRepository, cocktailExtService);
+        this.cocktailService = new CocktailServiceImpl(cocktailRepository, cocktailExtService);
 
         when(cocktailExtService.searchCocktails("test")).thenReturn(mockedCocktails());
         when(cocktailRepository.findAllById(anySet())).thenReturn(mockedShoppingListEntity().getCocktailEntities());
@@ -54,8 +54,8 @@ public class CocktailServiceTest extends AbstractTest {
     @Test
     public void searchDistinctIngredients() {
         final List<String> ingredients = cocktailService.searchDistinctIngredients(mockedShoppingListEntity().getCocktailEntities().stream().map(CocktailEntity::getId).collect(Collectors.toSet()));
-        assertEquals(mockedIngredients().size(), ingredients.size());
-        assertTrue(mockedIngredients().containsAll(ingredients));
+        assertEquals(mockedCocktailIngredients().size(), ingredients.size());
+        assertTrue(mockedCocktailIngredients().containsAll(ingredients));
     }
 
     private void checkCocktails(List<CocktailResource> cocktails) {

@@ -8,7 +8,6 @@ import com.ezgroceries.shoppinglist.AbstractTest;
 import com.ezgroceries.shoppinglist.model.ShoppingList;
 import com.ezgroceries.shoppinglist.persistence.entities.CocktailEntity;
 import com.ezgroceries.shoppinglist.persistence.entities.ShoppingListEntity;
-import com.ezgroceries.shoppinglist.persistence.repositories.CocktailRepository;
 import com.ezgroceries.shoppinglist.persistence.repositories.ShoppingListRepository;
 import com.ezgroceries.shoppinglist.security.user.AuthenticationFacade;
 import org.assertj.core.util.Lists;
@@ -29,19 +28,20 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class ShoppingListServiceTest extends AbstractTest {
 
-    private static final String SHOPPING_LIST_WITH_COCKTAILS = "94511c9b-6ee9-491c-acc3-07e45142ca2f";
-    private static final String SHOPPING_LIST_NO_COCKTAILS = "ca582a63-bf0e-47a8-a8d6-4aea840a04b0";
-
     @Mock
     private ShoppingListRepository shoppingListRepository;
 
     @Mock
-    private CocktailRepository cocktailRepository;
+    private CocktailService cocktailService;
+
+    @Mock
+    private MealService mealService;
 
     @Mock
     private AuthenticationFacade authenticationFacade;
@@ -52,7 +52,7 @@ public class ShoppingListServiceTest extends AbstractTest {
     public void initialize() {
         MockitoAnnotations.initMocks(this);
 
-        shoppingListService = new ShoppingListServiceImpl(shoppingListRepository, cocktailRepository, authenticationFacade);
+        shoppingListService = new ShoppingListServiceImpl(shoppingListRepository, cocktailService, mealService, authenticationFacade);
 
         when(authenticationFacade.getUserName()).thenReturn(mockedUser);
 
@@ -63,13 +63,14 @@ public class ShoppingListServiceTest extends AbstractTest {
                 .thenReturn(Optional.of(mockedShoppingListEntity()));
         when(shoppingListRepository.findById(UUID.fromString(SHOPPING_LIST_NO_COCKTAILS)))
                 .thenReturn(Optional.of(mockedShoppingListEntityNoCocktails()));
-        when(cocktailRepository.findAllById(mockedShoppingList().getCocktailIds())).thenReturn(
-                mockedShoppingListEntity().getCocktailEntities()
-        );
+        when(cocktailService.findCocktails(mockedShoppingList().getCocktailIds())).thenReturn(mockedCocktails());
 
         List<ShoppingListEntity> shoppingListEntities = Lists.newArrayList(mockedShoppingListEntityNoCocktails(), mockedShoppingListEntity());
         shoppingListEntities.sort(Comparator.comparing(ShoppingListEntity::getName));
         when(shoppingListRepository.findAll(Sort.by(Sort.Order.asc("name")))).thenReturn(shoppingListEntities);
+
+        when(cocktailService.searchDistinctIngredients(anySet())).thenReturn(mockedCocktailIngredients());
+        when(mealService.searchDistinctIngredients(anySet())).thenReturn(mockedMealIngredients());
     }
 
     @Test
@@ -112,6 +113,12 @@ public class ShoppingListServiceTest extends AbstractTest {
         // Should always be sorted asc on name
         checkShoppingListEntity(shoppingLists.get(0));
         checkShoppingListEntityEmptyCocktails(shoppingLists.get(1));
+    }
+
+    @Test
+    public void getDistinctIngredients() {
+        final Set<String> ingredients = this.shoppingListService.searchDistinctIngredients(UUID.fromString(SHOPPING_LIST_WITH_COCKTAILS));
+        assertEquals(7, ingredients.size());
     }
 
     private void checkShoppingListEntity(ShoppingList shoppingList) {
