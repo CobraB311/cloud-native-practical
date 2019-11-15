@@ -1,4 +1,4 @@
-package com.ezgroceries.shoppinglist.controller.model;
+package com.ezgroceries.shoppinglist.model;
 
 /*
     Created by Ruben Bernaert (JD68212) on 30/09/2019
@@ -6,21 +6,23 @@ package com.ezgroceries.shoppinglist.controller.model;
 
 import com.google.common.base.MoreObjects;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class CocktailResource {
 
     private UUID cocktailId;
+    private String drinkId;
     private String name;
     private String glass;
     private String instructions;
     private String image;
-    private List<String> ingredients;
+    private Set<String> ingredients;
 
-    public CocktailResource(UUID cocktailId, String name, String glass, String instructions, String image, List<String> ingredients) {
+    public CocktailResource(UUID cocktailId, String drinkId, String name, String glass, String instructions, String image, Set<String> ingredients) {
         this.cocktailId = cocktailId;
+        this.drinkId = drinkId;
         this.name = name;
         this.glass = glass;
         this.instructions = instructions;
@@ -71,17 +73,25 @@ public class CocktailResource {
         this.image = image;
     }
 
-    public List<String> getIngredients() {
+    public Set<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(Set<String> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getDrinkId() {
+        return drinkId;
+    }
+
+    public void setDrinkId(String drinkId) {
+        this.drinkId = drinkId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cocktailId, name, glass, instructions, image, ingredients);
+        return Objects.hash(cocktailId, drinkId, name, glass, instructions, image, ingredients);
     }
 
     @Override
@@ -94,6 +104,7 @@ public class CocktailResource {
         }
         final CocktailResource other = (CocktailResource) obj;
         return Objects.equals(this.cocktailId, other.cocktailId)
+                && Objects.equals(this.drinkId, other.drinkId)
                 && Objects.equals(this.name, other.name)
                 && Objects.equals(this.glass, other.glass)
                 && Objects.equals(this.instructions, other.instructions)
@@ -105,6 +116,7 @@ public class CocktailResource {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("cocktailId", cocktailId)
+                .add("drinkId", drinkId)
                 .add("name", name)
                 .add("glass", glass)
                 .add("instructions", instructions)

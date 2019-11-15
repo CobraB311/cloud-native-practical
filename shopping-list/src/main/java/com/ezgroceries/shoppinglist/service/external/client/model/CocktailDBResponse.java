@@ -1,13 +1,17 @@
-package com.ezgroceries.shoppinglist.service.client.model;
+package com.ezgroceries.shoppinglist.service.external.client.model;
 
 /*
     Created by Ruben Bernaert (JD68212) on 03/10/2019
 */
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Strings;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CocktailDBResponse {
 
@@ -130,6 +134,22 @@ public class CocktailDBResponse {
 
         public void setStrIngredient7(String strIngredient7) {
             this.strIngredient7 = strIngredient7;
+        }
+
+        public Set<String> getIngredients() {
+            return Stream.of(
+                    this.getStrIngredient1(),
+                    this.getStrIngredient2(),
+                    this.getStrIngredient3(),
+                    this.getStrIngredient4(),
+                    this.getStrIngredient5(),
+                    this.getStrIngredient6(),
+                    this.getStrIngredient7()
+            ).filter(
+                    i -> !Strings.isNullOrEmpty(i)
+            ).collect(
+                    Collectors.toSet()
+            );
         }
 
         @Override
