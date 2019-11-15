@@ -7,6 +7,7 @@ package com.ezgroceries.shoppinglist.service.external.client.model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -150,6 +151,27 @@ public class CocktailDBResponse {
             ).collect(
                     Collectors.toSet()
             );
+        }
+
+        public void setIngredients(List<String> ingredients) {
+            if (!ingredients.isEmpty()) {
+                try {
+                    int max = Math.min(ingredients.size(), 7);
+                    for (int i = 1; i <= max; i++) {
+                        final String ingredient = ingredients.get(i - 1);
+                        if (Strings.isNullOrEmpty(ingredient)) {
+                            return; // Finish for loop because rest of ingredients will also be empty
+                        }
+                        Field field = this.getClass().getDeclaredField("strIngredient" + i);
+                        field.setAccessible(true);
+                        field.set(this, ingredient);
+                    }
+                } catch (NoSuchFieldException e) {
+                    System.out.println("Error while converting ingredients: '" + e.getMessage() + "'.");
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
         @Override

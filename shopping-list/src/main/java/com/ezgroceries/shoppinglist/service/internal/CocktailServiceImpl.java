@@ -102,6 +102,9 @@ public class CocktailServiceImpl implements CocktailService {
         entity.setIdDrink(drink.getDrinkId());
         entity.setName(drink.getName());
         entity.setIngredients(drink.getIngredients());
+        entity.setGlass(drink.getGlass());
+        entity.setInstructions(drink.getInstructions());
+        entity.setImageLink(drink.getImage());
         return entity;
     }
 

@@ -39,6 +39,15 @@ public class CocktailEntity {
     @Column(name = "INGREDIENTS")
     private Set<String> ingredients;
 
+    @Column(name = "GLASS")
+    private String glass;
+
+    @Column(name = "INSTRUCTIONS")
+    private String instructions;
+
+    @Column(name = "IMAGE_LINK")
+    private String imageLink;
+
     @ManyToMany
     @JoinTable(
             name = "COCKTAIL_SHOPPING_LIST",
@@ -79,6 +88,30 @@ public class CocktailEntity {
         this.ingredients = ingredients;
     }
 
+    public String getGlass() {
+        return glass;
+    }
+
+    public void setGlass(String glass) {
+        this.glass = glass;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
+    }
+
     public List<ShoppingListEntity> getShoppingListEntities() {
         return shoppingListEntities;
     }
@@ -89,7 +122,7 @@ public class CocktailEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, idDrink, name, ingredients, shoppingListEntities);
+        return Objects.hash(id, idDrink, name, ingredients, glass, instructions, imageLink, shoppingListEntities);
     }
 
     @Override
@@ -105,6 +138,9 @@ public class CocktailEntity {
                 && Objects.equals(this.idDrink, other.idDrink)
                 && Objects.equals(this.name, other.name)
                 && Objects.equals(this.ingredients, other.ingredients)
+                && Objects.equals(this.glass, other.glass)
+                && Objects.equals(this.instructions, other.instructions)
+                && Objects.equals(this.imageLink, other.imageLink)
                 && Objects.equals(this.shoppingListEntities, other.shoppingListEntities);
     }
 
@@ -115,6 +151,9 @@ public class CocktailEntity {
                 .add("idDrink", idDrink)
                 .add("name", name)
                 .add("ingredients", ingredients)
+                .add("glass", glass)
+                .add("instructions", instructions)
+                .add("imageLink", imageLink)
                 .add("shoppingListEntities", shoppingListEntities)
                 .toString();
     }
